@@ -1,0 +1,9 @@
+{
+  "domain": "ledfxrm",
+  "name": "LedFX Remote",
+  "documentation": "https://www.yeonv.com",
+  "dependencies": ["mqtt"],
+  "codeowners": ["YeonV"],
+  "requirements": [],
+  "config_flow": false
+}
