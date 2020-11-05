@@ -21,13 +21,10 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         """Initialize."""
         self._errors = {}
 
-    async def async_step_user(
-        self, user_input=None  # pylint: disable=bad-continuation
-    ):
+    async def async_step_user( self, user_input=None ):
         """Handle a flow initialized by the user."""
         self._errors = {}
-
-        # Uncomment the next 2 lines if only a single instance of the integration is allowed:
+    
         if self._async_current_entries():
             return self.async_abort(reason="single_instance_allowed")
 
