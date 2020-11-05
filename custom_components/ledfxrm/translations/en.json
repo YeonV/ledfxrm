@@ -1,0 +1,32 @@
+{
+    "config": {
+        "title": "Ledfxrm",
+        "step": {
+            "user": {
+                "title": "Ledfxrm",
+                "description": "If you need help with the configuration have a look here: https://github.com/YeonV/ledfxrm",
+                "data": {
+                    "thehost": "192.168.1.56",
+                    "theport": 8888
+                }
+            }
+        },
+        "error": {
+            "auth": "Host/Port wrong."
+        },
+        "abort": {
+            "single_instance_allowed": "Only a single configuration of Ledfxrm is allowed."
+        }
+    },
+    "options": {
+        "step": {
+            "user": {
+                "data": {
+                    "binary_sensor": "Binary sensor enabled",
+                    "sensor": "Sensor enabled",
+                    "switch": "Switch enabled"
+                }
+            }
+        }
+    }
+}
