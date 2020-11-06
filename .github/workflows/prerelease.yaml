@@ -8,6 +8,7 @@ name: Create Pre Release
 jobs:
   build:
     name: Create Pre Release
+    if: "startsWith(github.event.head_commit.message, 'dev')"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
