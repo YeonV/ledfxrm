@@ -1,8 +1,7 @@
 on:
   push:
-    # Sequence of patterns matched against refs/tags
-    tags:
-      - 'dev*' # Push events to matching dev*
+    branches:
+      - "master"
 
 name: Create Pre Release
 
@@ -26,4 +25,4 @@ jobs:
             - First Change
             - Second Change
           draft: false
-          prerelease: false
+          prerelease: true
