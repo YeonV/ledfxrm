@@ -93,7 +93,7 @@ class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
         """Initialize."""
         self.api = requests.get("http://" + thehost + ":" + theport + "/api/info")
         self.platforms = []
-        logging.warning('API: %s', self.api.json())
+        logging.warning('API!!!')
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=SCAN_INTERVAL)
 
     async def _async_update_data(self):

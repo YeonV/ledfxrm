@@ -2,6 +2,7 @@
 from homeassistant import config_entries
 from homeassistant.core import callback
 import voluptuous as vol
+import logging
 import requests
 from custom_components.blueprint.const import (  # pylint: disable=unused-import
     CONF_HOST,
@@ -19,6 +20,7 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
     def __init__(self):
         """Initialize."""
+        logging.warning('Config FLOW!!!')
         self._errors = {}
 
     async def async_step_user( self, user_input=None ):
