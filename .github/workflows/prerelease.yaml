@@ -22,6 +22,6 @@ jobs:
           tag_name: ${{ github.event.head_commit.message }}
           release_name: ${{ github.event.head_commit.message }}
           body: |
-            DEV-release
+            DEV-Release
           draft: false
           prerelease: true
