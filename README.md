@@ -1,5 +1,5 @@
 # Removed ALL functionality!!
-# Refactoring to be a HACS Integration
+# Refactoring to be a real HomAssistant Integration installable via HACS
 
 # LedFX Remote for HomeAssistant
 
@@ -30,3 +30,11 @@ A picklist is created/upadted and filled with the scenes
 
 => changing the dropdown will activate the selected scene.
 
+### Credits
+
+Tinkerer
+https://github.com/ahodges9/LedFx/tree/dev/ledfx
+https://github.com/Aircoookie/WLED
+https://github.com/custom-components/blueprint
+https://github.com/hacs/
+https://github.com/home-assistant
