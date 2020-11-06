@@ -33,8 +33,13 @@ A picklist is created/upadted and filled with the scenes
 ### Credits
 
 Tinkerer
+
 https://github.com/ahodges9/LedFx/tree/dev/ledfx
+
 https://github.com/Aircoookie/WLED
+
 https://github.com/custom-components/blueprint
+
 https://github.com/hacs/
+
 https://github.com/home-assistant
