@@ -3,6 +3,9 @@
 
 # LedFX Remote for HomeAssistant
 
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/custom-components/hacs)
+
+
 A proof of concept, for controlling a remote [ledfx-server](https://github.com/ahodges9/LedFx) via [Home Assistant](https://github.com/home-assistant)
 
 ### How to
