@@ -22,11 +22,11 @@ Refactoring this sh.t asap
 When the sync runs, 3 API-endpoints of ledfx are fetched: info, devices, scenes
 A Summary-Entity is created with those infos:
 
-![summary](summary.png)
+![summary](https://user-images.githubusercontent.com/28861537/98367840-9c726e80-2036-11eb-9121-6b8aaddbbdfd.png)
 
 A picklist is created/upadted and filled with the scenes
 
-![dropdown](dropdown.png)
+![dropdown](https://user-images.githubusercontent.com/28861537/98367833-98465100-2036-11eb-8a6b-ad538dd31960.png)
 
 => changing the dropdown will activate the selected scene.
 
