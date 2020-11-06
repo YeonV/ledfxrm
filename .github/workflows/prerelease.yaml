@@ -22,8 +22,6 @@ jobs:
           tag_name: ${{ github.event.head_commit.message }}
           release_name: ${{ github.event.head_commit.message }}
           body: |
-            Changes in this Release
-            - First Change
-            - Second Change
+            DEV-release
           draft: false
           prerelease: true
