@@ -4,7 +4,7 @@ from homeassistant.core import callback
 import voluptuous as vol
 import logging
 import requests
-from custom_components.blueprint.const import (  # pylint: disable=unused-import
+from custom_components.ledfxrm.const import (  # pylint: disable=unused-import
     CONF_HOST,
     CONF_PORT,
     DOMAIN,
