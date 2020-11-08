@@ -2,6 +2,8 @@
 # Refactoring to be a real HomAssistant Integration installable via HACS
 last working state: https://github.com/YeonV/ledfxrm/commit/43a0c9dd9746070e5744d202ebd4aead4bbfa05e
 
+---
+
 # LedFX Remote for HomeAssistant
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/custom-components/hacs)
