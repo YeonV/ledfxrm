@@ -38,7 +38,7 @@ A picklist is created/upadted and filled with the scenes
 
 ### Credits
 
-[Frenck!!!](https://github.com/frenck)
+[Frenck!](https://github.com/frenck)
 
 [Tinkerer](https://github.com/DubhAd/)
 
