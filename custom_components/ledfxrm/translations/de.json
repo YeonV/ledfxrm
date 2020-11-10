@@ -7,7 +7,11 @@
                 "description": "Bei Fragen: https://github.com/YeonV/ledfxrm",
                 "data": {
                     "thehost": "192.168.1.56",
-                    "theport": 8888
+                    "theport": 8888,
+                    "host": "Host",
+                    "port": "Port",
+                    "namea": "Name 1",
+                    "nameb": "Name 2"
                 }
             }
         },

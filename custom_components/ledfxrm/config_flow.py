@@ -1,6 +1,9 @@
 """Adds config flow for Ledfxrm."""
 from homeassistant import config_entries
 from homeassistant.core import callback
+import asyncio
+import aiohttp
+import async_timeout
 import voluptuous as vol
 import logging
 import requests
@@ -11,6 +14,11 @@ from custom_components.ledfxrm.const import (  # pylint: disable=unused-import
     PLATFORMS,
 )
 
+YZNAME = "namea"
+YZNAMEB = "nameb"
+YZHOST = "host"
+YZPORT = "port"
+
 
 class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     """Config flow for Ledfxrm."""
@@ -20,9 +28,9 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
     def __init__(self):
         """Initialize."""
-        logging.warning('Config FLOW!!!')
+        #logging.warning('Config FLOW!!!')
         self._errors = {}
-
+        
     async def async_step_user( self, user_input=None ):
         """Handle a flow initialized by the user."""
         self._errors = {}
@@ -31,12 +39,14 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             return self.async_abort(reason="single_instance_allowed")
 
         if user_input is not None:
-            valid = await self._test_credentials(
-                user_input[CONF_HOST], user_input[CONF_PORT]
+            #logging.warning('UserInput: %s', user_input['host'])
+            #logging.warning('UserInput: %s', user_input['port'])
+            api_info = await self._test_credentials(
+                user_input['host'], user_input['port']
             )
-            if valid:
+            if api_info:
                 return self.async_create_entry(
-                    title=user_input[CONF_HOST], data=user_input
+                    title=api_info['name'], data=api_info
                 )
             else:
                 self._errors["base"] = "auth"
@@ -55,20 +65,27 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="user",
             data_schema=vol.Schema(
-                {vol.Required(CONF_HOST): str, vol.Required(CONF_PORT): int}
+                {vol.Required(YZHOST, default="192.168.1.56"): str, vol.Required(YZPORT, default=8888): int}
             ),
             errors=self._errors,
         )
-
+        
+    
+            
     async def _test_credentials(self, thehost, theport):
         """Return true if credentials is valid."""
-        try:
-            client = requests.get("http://" + thehost + ":" + theport + "/api/info")
-            await client.async_get_data()
-            return True
-        except Exception:  # pylint: disable=broad-except
-            pass
-        return False
+        logging.warning('Host: %s', thehost)
+        logging.warning('Port: %s', str(theport))
+        loop = asyncio.get_event_loop()
+        url = "http://" + thehost + ":" + str(theport) + "/api/info"
+        async with aiohttp.ClientSession(loop=loop, trust_env = True) as session:
+            async with session.get(url, ssl=False) as resp:
+                #logging.warning('resp.status: %s', resp)
+                logging.warning('RESPONSE: %s', await resp.json())
+                return await resp.json()
+            
+
+        
 
 
 class LedfxrmOptionsFlowHandler(config_entries.OptionsFlow):

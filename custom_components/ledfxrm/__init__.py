@@ -91,19 +91,20 @@ class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
 
     def __init__(self, hass, thehost, theport):
         """Initialize."""
-        self.api = requests.get("http://" + thehost + ":" + theport + "/api/info")
+        #self.api = requests.get("http://" + thehost + ":" + str(theport) + "/api/info")
         self.platforms = []
-        logging.warning('API!!!')
+        logging.warning('Good things done! Bad things start now:')
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=SCAN_INTERVAL)
 
     async def _async_update_data(self):
         """Update data via library."""
-        try:
-            data = await self.api.async_get_data()
-            logging.warning('%s', data.json())
-            return data.get("data", {})
-        except Exception as exception:
-            raise UpdateFailed(exception)
+        #try:
+            #data = await self.api.async_get_data()
+            #logging.warning('%s', data.json())
+            #return data.get("data", {})
+        #except Exception as exception:
+        #    raise UpdateFailed(exception)
+        return {'host': '192.168.1.56'}
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Handle removal of an entry."""
