@@ -3,7 +3,7 @@
   "name": "LedFX Remote",
   "documentation": "https://github.com/YeonV/ledfxrm",
   "issue_tracker": "https://github.com/YeonV/ledfxrm/issues",
-  "dependencies": ["mqtt", "http", "socket"],
+  "dependencies": ["http"],
   "codeowners": ["YeonV"],
   "requirements": [],
   "config_flow": true
