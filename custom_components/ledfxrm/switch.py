@@ -1,5 +1,5 @@
 """Switch platform for ledfxrm."""
-from homeassistant.components.switch import SwitchDevice
+from homeassistant.components.switch import SwitchEntity
 
 from custom_components.ledfxrm.const import DEFAULT_NAME, DOMAIN, ICON_POWER, SWITCH
 from custom_components.ledfxrm.entity import LedfxrmEntity
@@ -11,7 +11,7 @@ async def async_setup_entry(hass, entry, async_add_devices):
     async_add_devices([LedfxrmBinarySwitch(coordinator, entry)])
 
 
-class LedfxrmBinarySwitch(LedfxrmEntity, SwitchDevice):
+class LedfxrmBinarySwitch(LedfxrmEntity, SwitchEntity):
     """ledfxrm switch class."""
 
     async def async_turn_on(self, **kwargs):  # pylint: disable=unused-argument
@@ -37,4 +37,4 @@ class LedfxrmBinarySwitch(LedfxrmEntity, SwitchDevice):
     @property
     def is_on(self):
         """Return true if the switch is on."""
-        return self.coordinator.api.something
+        return self.coordinator

@@ -41,12 +41,12 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             #logging.warning('UserInput: %s', user_input['host'])
             #logging.warning('UserInput: %s', user_input['port'])
-            api_info = await self._test_credentials(
+            api = await self.get_rest_status(
                 user_input['host'], user_input['port']
             )
-            if api_info:
+            if api:
                 return self.async_create_entry(
-                    title=api_info['name'], data=api_info
+                    title=api['rest_info']['name'], data=api
                 )
             else:
                 self._errors["base"] = "auth"
@@ -72,18 +72,32 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         
     
             
-    async def _test_credentials(self, thehost, theport):
+    async def get_rest_status(self, thehost, theport):
         """Return true if credentials is valid."""
-        logging.warning('Host: %s', thehost)
-        logging.warning('Port: %s', str(theport))
+        # logging.warning('Host: %s', thehost)
+        # logging.warning('Port: %s', str(theport))
         loop = asyncio.get_event_loop()
         url = "http://" + thehost + ":" + str(theport) + "/api/info"
+        url2 = "http://" + thehost + ":" + str(theport) + "/api/devices"
+        url3 = "http://" + thehost + ":" + str(theport) + "/api/scenes"
+        yz = {}
+        yz['rest_info'] = {}
+        yz['rest_devices'] = {}
+        yz['rest_scenes'] = {}
         async with aiohttp.ClientSession(loop=loop, trust_env = True) as session:
-            async with session.get(url, ssl=False) as resp:
-                #logging.warning('resp.status: %s', resp)
-                logging.warning('RESPONSE: %s', await resp.json())
-                return await resp.json()
-            
+            async with session.get(url, ssl=False) as resp:                
+                rest_info = await resp.json()
+                yz['rest_info'] = rest_info
+        
+            async with session.get(url2, ssl=False) as resp_devices:                
+                rest_devices = await resp_devices.json()                
+                yz['rest_devices'] = rest_devices
+        
+            async with session.get(url3, ssl=False) as resp_scenes:                
+                rest_scenes = await resp_scenes.json()                
+                yz['rest_scenes'] = rest_scenes
+                # logging.warning('REST_API: %s', yz)
+        return yz
 
         
 

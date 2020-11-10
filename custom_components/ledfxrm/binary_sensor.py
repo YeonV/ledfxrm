@@ -1,5 +1,5 @@
 """Binary sensor platform for ledfxrm."""
-from homeassistant.components.binary_sensor import BinarySensorDevice
+from homeassistant.components.binary_sensor import BinarySensorEntity 
 
 from custom_components.ledfxrm.const import (
     BINARY_SENSOR,
@@ -16,13 +16,13 @@ async def async_setup_entry(hass, entry, async_add_devices):
     async_add_devices([LedfxrmBinarySensor(coordinator, entry)])
 
 
-class LedfxrmBinarySensor(LedfxrmEntity, BinarySensorDevice):
+class LedfxrmBinarySensor(LedfxrmEntity, BinarySensorEntity ):
     """ledfxrm binary_sensor class."""
 
     @property
     def name(self):
         """Return the name of the binary_sensor."""
-        return f"{DEFAULT_NAME}_{BINARY_SENSOR}"
+        return f"LedFX Server-Status"
 
     @property
     def device_class(self):

@@ -91,19 +91,19 @@ class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
 
     def __init__(self, hass, thehost, theport):
         """Initialize."""
-        #self.api = requests.get("http://" + thehost + ":" + str(theport) + "/api/info")
+        #self.api = get_rest_status(thehost, theport)
         self.platforms = []
-        logging.warning('Good things done! Bad things start now:')
+        #logging.warning('Good things done! Bad things start now:')
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=SCAN_INTERVAL)
 
     async def _async_update_data(self):
         """Update data via library."""
-        #try:
-            #data = await self.api.async_get_data()
-            #logging.warning('%s', data.json())
-            #return data.get("data", {})
-        #except Exception as exception:
-        #    raise UpdateFailed(exception)
+        # try:
+        #     data = await self.api.async_get_data()
+        #     logging.warning('BOOOOM %s', data.json())
+        #     return data.get("data", {})
+        # except Exception as exception:
+        #     raise UpdateFailed(exception)
         return {'host': '192.168.1.56'}
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
@@ -134,63 +134,15 @@ async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry):
 
 
 
-
-# def setup(hass, config):
-#     hass.states.set('ledfxrm.ledfx_Remote', 'by Blade',{ 'icon': 'mdi:emoticon-devil' })
-
-
-    
+# IGNORE EVERYTHING BELOW
+# 
+#     
 #     # ================================================================ #
 #     # TODO: Create a CommandLine Switch for starting/stopping the server. 
 #     # Commands should come from config
 #     # this is a non working-dummy
 #     # ================================================================ #
 #     hass.states.set('switch.ledfxrm_start', False,{ 'icon': 'mdi:led-strip', 'platform': 'command_line', 'command_on': 'echo "some bash command"', 'command_off': 'echo "some bash command"' })
-    
-    
-
-    
-#     # ================================================================ #
-#     # TODO: Refactor this to be an async setup, not triggered by mqtt
-#     # ================================================================ #
-#     mqtt = hass.components.mqtt
-#     topic_trigger = 'blade/ledfx/info'
-#     def message_received_trigger(msg):
-#         name = 'test'
-#         version = 'test'
-#         scenes = 0
-#         scenenames = []
-#         try:
-#             r0 = requests.get("http://" + ip + "/api/info")
-#             logging.warning('%s', r0.json())
-#             names = json_extract(r0.json(), 'name')
-#             versions = json_extract(r0.json(), 'version')
-#             name = names[0]
-#             version = versions[0]
-#         except:
-#             pass
-#         try:
-#             r2 = requests.get("http://" + ip + "/api/scenes")
-#             logging.warning('%s', r2.json())
-#             for k, v in r2.json().items():
-#                 if isinstance(v, (dict, list)):
-#                     for ke, va in v.items():
-#                         scenenames.append(ke)
-#             logging.warning('%s', str(scenenames))
-#             scenes = len(scenenames)
-#             logging.warning('%i', scenes)
-#         except:
-#             pass
-#         try:
-#             r1 = requests.get("http://" + ip + "/api/devices")
-#             logging.warning('%s', r1.json())
-#             devicenames = json_extract(r1.json(), 'name')
-#             pixels = json_extract(r1.json(), 'pixel_count')
-#             devices = 0
-#             logging.warning('%s', str(pixels))
-#             devices = len(devicenames);
-#             pixelsum = sum(pixels)
-
 #             # ================================================================ #
 #             # Fill Dummy Entity with data from all apis
 #             # ================================================================ #
@@ -255,11 +207,3 @@ async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry):
 #             #        content_type: application/json
 #             #
 #             # ================================================================ #
-            
-            
-            
-#         except:
-#             pass
-#     mqtt.subscribe(topic_trigger, message_received_trigger)
-
-#     return True

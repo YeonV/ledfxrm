@@ -1,7 +1,7 @@
 """LedfxrmEntity class"""
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from custom_components.ledfxrm.const import DOMAIN, NAME, VERSION
+from custom_components.ledfxrm.const import DOMAIN, NAME, VERSION, MANUFACTURER
 
 
 class LedfxrmEntity(CoordinatorEntity):
@@ -20,7 +20,7 @@ class LedfxrmEntity(CoordinatorEntity):
             "identifiers": {(DOMAIN, self.unique_id)},
             "name": NAME,
             "model": VERSION,
-            "manufacturer": NAME,
+            "manufacturer": MANUFACTURER
         }
 
     @property
