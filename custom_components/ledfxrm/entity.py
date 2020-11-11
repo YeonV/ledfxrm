@@ -17,13 +17,13 @@ class LedfxrmEntity(CoordinatorEntity):
 
     @property
     def device_info(self):
-        logging.warning('YZ: %s', self.coordinator.data)
+        logging.warning('YZ: %s {% version_installed %}', self.coordinator.data)
         return {
             "identifiers": {(DOMAIN, self.unique_id)},
             "name": NAME,
-            "model": self.coordinator.data.get("info").get("name"),
+            "model": self.coordinator.data.get("info").get("name") + ' ' + self.coordinator.data.get("info").get("version"),
             "manufacturer": MANUFACTURER,
-            "sw_version": self.coordinator.data.get("info").get("version"),
+            "sw_version": VERSION,
         }
 
     @property

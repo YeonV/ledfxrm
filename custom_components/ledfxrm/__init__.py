@@ -20,7 +20,7 @@ from custom_components.ledfxrm.const import (
 )
 
 
-SCAN_INTERVAL = timedelta(seconds=300)
+SCAN_INTERVAL = timedelta(seconds=30)
 DOMAIN = 'ledfxrm'
 DEPENDENCIES = ['mqtt']
 
@@ -66,9 +66,10 @@ async def async_setup(hass: HomeAssistant, config: Config):
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Set up this integration using UI."""
-    #logging.warning('ENTRY: %s', entry)
+    
     #str_mydict = ''.join('{}{}'.format(key, val) for key, val in entry.data.items())
     #logging.warning('ENTRY: %s', str_mydict)
+    
     if hass.data.get(DOMAIN) is None:
         hass.data.setdefault(DOMAIN, {})
         _LOGGER.info(STARTUP_MESSAGE)
@@ -76,12 +77,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     thehost = entry.data.get('host')
     theport = entry.data.get('port')
     theversion = entry.data.get('version')
+    
     #theurl = entry.data.get('rest_info').get('url')
     #thehost, theport = split_host_port(theurl)
     #logging.warning('URL %s ', theurl )
+    
     #logging.warning('thehost %s ', thehost )
     #logging.warning('theport %s ', theport )
-    logging.warning('Version %s ', theversion )
+    #logging.warning('Version %s ', theversion )
     
     coordinator = LedfxrmDataUpdateCoordinator(
         hass, thehost, theport, theversion
@@ -130,13 +133,17 @@ class myClient():
             async with session.get(url3, ssl=False) as resp_scenes:                
                 rest_scenes = await resp_scenes.json()                
                 yz['rest_scenes'] = rest_scenes                
-                #logging.warning('REST_API: %s', yz)
+                
                 #service_data = {'entity_id': 'input_select.ledfx_seceneselector' ,'options': ['off' 'on']}
                 #hass.services.call('input_select', 'set_options', service_data)
-                logging.warning('REST_API: %s', yz)
+                
+                #logging.warning('REST_API: %s', yz)
         
         return {'info':rest_info, 'devices': rest_devices, 'scenes': rest_scenes}
-
+    async def async_change_something(self, state):
+        logging.warning('BOOOOM: %s', state)
+        
+        return {'status': 'ok'}
 
 class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
     """Class to manage fetching data from the API."""

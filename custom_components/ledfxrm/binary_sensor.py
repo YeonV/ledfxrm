@@ -1,5 +1,6 @@
 """Binary sensor platform for ledfxrm."""
 from homeassistant.components.binary_sensor import BinarySensorEntity 
+import logging
 
 from custom_components.ledfxrm.const import (
     BINARY_SENSOR,
@@ -32,4 +33,7 @@ class LedfxrmBinarySensor(LedfxrmEntity, BinarySensorEntity ):
     @property
     def is_on(self):
         """Return true if the binary_sensor is on."""
-        return self.coordinator.data.get("bool_on", False)
+        logging.warning('YZ: %s', self.coordinator.data)
+        if self.coordinator.data.get("info").get("version") is None:
+            return False
+        return True
