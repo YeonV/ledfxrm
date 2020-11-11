@@ -14,8 +14,6 @@ from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from custom_components.ledfxrm.const import (
-    CONF_PORT,
-    CONF_HOST,
     DOMAIN,
     PLATFORMS,
     STARTUP_MESSAGE,
@@ -68,23 +66,25 @@ async def async_setup(hass: HomeAssistant, config: Config):
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Set up this integration using UI."""
-    
-    str_mydict = ''.join('{}{}'.format(key, val) for key, val in entry.data.items())
+    #logging.warning('ENTRY: %s', entry)
+    #str_mydict = ''.join('{}{}'.format(key, val) for key, val in entry.data.items())
     #logging.warning('ENTRY: %s', str_mydict)
     if hass.data.get(DOMAIN) is None:
         hass.data.setdefault(DOMAIN, {})
         _LOGGER.info(STARTUP_MESSAGE)
         
-    #thehost = entry.data.get('thehost')
-    #theport = entry.data.get('theport')
-    theurl = entry.data.get('rest_info').get('url')
-    thehost, theport = split_host_port(theurl)
-    logging.warning('URL %s ', theurl )
-    logging.warning('thehost %s ', thehost )
-    logging.warning('theport %s ', theport )
+    thehost = entry.data.get('host')
+    theport = entry.data.get('port')
+    theversion = entry.data.get('version')
+    #theurl = entry.data.get('rest_info').get('url')
+    #thehost, theport = split_host_port(theurl)
+    #logging.warning('URL %s ', theurl )
+    #logging.warning('thehost %s ', thehost )
+    #logging.warning('theport %s ', theport )
+    logging.warning('Version %s ', theversion )
     
     coordinator = LedfxrmDataUpdateCoordinator(
-        hass, thehost, theport
+        hass, thehost, theport, theversion
     )
     await coordinator.async_refresh()
     
@@ -109,10 +109,10 @@ class myClient():
         self.thehost = thehost
         self.theport = theport
     async def update(self):
-        logging.warning('2222 host %s port: %s', self.thehost, str(self.theport))
-        url = self.thehost + ":" + str(self.theport) + "/api/info"
-        url2 = self.thehost + ":" + str(self.theport) + "/api/devices"
-        url3 = self.thehost + ":" + str(self.theport) + "/api/scenes"
+        #logging.warning('2222 host %s port: %s', self.thehost, str(self.theport))
+        url = "http://" + self.thehost + ":" + str(self.theport) + "/api/info"
+        url2 = "http://" + self.thehost + ":" + str(self.theport) + "/api/devices"
+        url3 = "http://" + self.thehost + ":" + str(self.theport) + "/api/scenes"
         yz = {}
         yz['rest_info'] = {}
         yz['rest_devices'] = {}
@@ -130,7 +130,7 @@ class myClient():
             async with session.get(url3, ssl=False) as resp_scenes:                
                 rest_scenes = await resp_scenes.json()                
                 yz['rest_scenes'] = rest_scenes                
-                logging.warning('REST_API: %s', yz)
+                #logging.warning('REST_API: %s', yz)
                 #service_data = {'entity_id': 'input_select.ledfx_seceneselector' ,'options': ['off' 'on']}
                 #hass.services.call('input_select', 'set_options', service_data)
                 logging.warning('REST_API: %s', yz)
@@ -140,12 +140,12 @@ class myClient():
 
 class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
     """Class to manage fetching data from the API."""
-    def __init__(self, hass: HomeAssistant, thehost, theport):
+    def __init__(self, hass: HomeAssistant, thehost, theport, theversion):
         """Initialize."""
-        
+        self.theversion = theversion
         self.thehost = thehost
         self.theport = theport
-        logging.warning('host port ::: %s ::: %s', thehost, str(theport))
+        #logging.warning('host port ::: %s ::: %s', thehost, str(theport))
         self.api = myClient(thehost, theport)
         self.platforms = []
         #logging.warning('Good things done! Bad things start now:')
@@ -156,10 +156,10 @@ class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
         try:
             data = await self.api.update()
             #logging.warning('BOOOOM %s', data)
-            return 
+            return data
         except Exception as exception:
             raise UpdateFailed(exception)
-        return {'host': '192.168.1.56'}
+        #return {'host': '192.168.1.56'}
         
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):

@@ -26,8 +26,8 @@ PLATFORMS = [BINARY_SENSOR, SENSOR, SWITCH]
 
 # Configuration and options
 CONF_ENABLED = "enabled"
-CONF_HOST = "192.168.1.56"
-CONF_PORT = 8888
+CONF_HOST = "host"
+CONF_PORT = "port"
 
 # Defaults
 DEFAULT_NAME = DOMAIN

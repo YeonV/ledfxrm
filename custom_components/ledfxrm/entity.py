@@ -1,5 +1,6 @@
 """LedfxrmEntity class"""
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+import logging
 
 from custom_components.ledfxrm.const import DOMAIN, NAME, VERSION, MANUFACTURER
 
@@ -16,11 +17,13 @@ class LedfxrmEntity(CoordinatorEntity):
 
     @property
     def device_info(self):
+        logging.warning('YZ: %s', self.coordinator.data)
         return {
             "identifiers": {(DOMAIN, self.unique_id)},
             "name": NAME,
-            "model": VERSION,
-            "manufacturer": MANUFACTURER
+            "model": self.coordinator.data.get("info").get("name"),
+            "manufacturer": MANUFACTURER,
+            "sw_version": self.coordinator.data.get("info").get("version"),
         }
 
     @property
@@ -28,5 +31,5 @@ class LedfxrmEntity(CoordinatorEntity):
         """Return the state attributes."""
         return {
             "time": str(self.coordinator.data.get("time")),
-            "static": self.coordinator.data.get("static"),
+            "static": self.coordinator.data.get("version"),
         }

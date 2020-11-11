@@ -41,14 +41,15 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             #logging.warning('UserInput: %s', user_input['host'])
             #logging.warning('UserInput: %s', user_input['port'])
-            api = await self.get_rest_status(
+            name, version = await self.get_rest_status(
                 user_input['host'], user_input['port']
             )
-            if api:
+            if name:
                 #service_data = {'entity_id': 'input_select.ledfx_seceneselector' ,'options': api['rest_scenes']}
                 #hass.services.call('input_select', 'set_options', service_data)
+                data_attr = {'host': user_input['host'], 'port': user_input['port'], 'version': version, 'name': name}
                 return self.async_create_entry(
-                    title=api['rest_info']['name'], data=api
+                    title=name, data= data_attr
                 )
             else:
                 self._errors["base"] = "auth"
@@ -80,28 +81,14 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         # logging.warning('Port: %s', str(theport))
         loop = asyncio.get_event_loop()
         url = "http://" + thehost + ":" + str(theport) + "/api/info"
-        url2 = "http://" + thehost + ":" + str(theport) + "/api/devices"
-        url3 = "http://" + thehost + ":" + str(theport) + "/api/scenes"
-        yz = {}
-        yz['rest_info'] = {}
-        yz['rest_devices'] = {}
-        yz['rest_scenes'] = {}
         async with aiohttp.ClientSession(loop=loop, trust_env = True) as session:
             async with session.get(url, ssl=False) as resp:                
                 rest_info = await resp.json()
-                yz['rest_info'] = rest_info
-        
-            async with session.get(url2, ssl=False) as resp_devices:                
-                rest_devices = await resp_devices.json()                
-                yz['rest_devices'] = rest_devices
-        
-            async with session.get(url3, ssl=False) as resp_scenes:                
-                rest_scenes = await resp_scenes.json()                
-                yz['rest_scenes'] = rest_scenes                
-                
-                logging.warning('REST_API: %s', yz)
+                name = rest_info['name']
+                version = rest_info['version']
+                logging.warning('Config for %s | Version: %s', name, version)
         #return yz
-        return yz
+        return name, version
         
 
 
