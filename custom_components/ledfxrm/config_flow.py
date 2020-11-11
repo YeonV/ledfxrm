@@ -45,6 +45,8 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 user_input['host'], user_input['port']
             )
             if api:
+                #service_data = {'entity_id': 'input_select.ledfx_seceneselector' ,'options': api['rest_scenes']}
+                #hass.services.call('input_select', 'set_options', service_data)
                 return self.async_create_entry(
                     title=api['rest_info']['name'], data=api
                 )
@@ -95,10 +97,11 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         
             async with session.get(url3, ssl=False) as resp_scenes:                
                 rest_scenes = await resp_scenes.json()                
-                yz['rest_scenes'] = rest_scenes
-                # logging.warning('REST_API: %s', yz)
+                yz['rest_scenes'] = rest_scenes                
+                
+                logging.warning('REST_API: %s', yz)
+        #return yz
         return yz
-
         
 
 

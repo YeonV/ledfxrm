@@ -18,6 +18,7 @@ BINARY_SENSOR_DEVICE_CLASS = "connectivity"
 
 # Platforms
 BINARY_SENSOR = "binary_sensor"
+INPUT_SELECT = "input_select"
 SENSOR = "sensor"
 SWITCH = "switch"
 PLATFORMS = [BINARY_SENSOR, SENSOR, SWITCH]

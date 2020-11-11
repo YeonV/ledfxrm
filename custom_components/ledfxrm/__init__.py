@@ -1,4 +1,5 @@
 import asyncio
+import aiohttp
 from datetime import timedelta
 import socket
 _sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -31,7 +32,16 @@ DEPENDENCIES = ['mqtt']
 # ================================================================ #
 ip = '192.168.1.56:8888'
 
+def split_host_port(string):
+    if not string.rsplit(':', 1)[-1].isdigit():
+        return (string, None)
 
+    string = string.rsplit(':', 1)
+
+    host = string[0]  # 1st index is always host
+    port = int(string[1])
+
+    return host, port
 
 def json_extract(obj, key):
     arr = []
@@ -58,18 +68,26 @@ async def async_setup(hass: HomeAssistant, config: Config):
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Set up this integration using UI."""
+    
+    str_mydict = ''.join('{}{}'.format(key, val) for key, val in entry.data.items())
+    #logging.warning('ENTRY: %s', str_mydict)
     if hass.data.get(DOMAIN) is None:
         hass.data.setdefault(DOMAIN, {})
         _LOGGER.info(STARTUP_MESSAGE)
-
-    thehost = entry.data.get(CONF_HOST)
-    theport = entry.data.get(CONF_PORT)
-
+        
+    #thehost = entry.data.get('thehost')
+    #theport = entry.data.get('theport')
+    theurl = entry.data.get('rest_info').get('url')
+    thehost, theport = split_host_port(theurl)
+    logging.warning('URL %s ', theurl )
+    logging.warning('thehost %s ', thehost )
+    logging.warning('theport %s ', theport )
+    
     coordinator = LedfxrmDataUpdateCoordinator(
-        hass, thehost=thehost, theport=theport
+        hass, thehost, theport
     )
     await coordinator.async_refresh()
-
+    
     if not coordinator.last_update_success:
         raise ConfigEntryNotReady
 
@@ -81,30 +99,68 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
             hass.async_add_job(
                 hass.config_entries.async_forward_entry_setup(entry, platform)
             )
-
+    
     entry.add_update_listener(async_reload_entry)
     return True
 
 
+class myClient():
+    def __init__(self, thehost, theport):
+        self.thehost = thehost
+        self.theport = theport
+    async def update(self):
+        logging.warning('2222 host %s port: %s', self.thehost, str(self.theport))
+        url = self.thehost + ":" + str(self.theport) + "/api/info"
+        url2 = self.thehost + ":" + str(self.theport) + "/api/devices"
+        url3 = self.thehost + ":" + str(self.theport) + "/api/scenes"
+        yz = {}
+        yz['rest_info'] = {}
+        yz['rest_devices'] = {}
+        yz['rest_scenes'] = {}
+        loop = asyncio.get_event_loop()
+        async with aiohttp.ClientSession(loop=loop, trust_env = True) as session:
+            async with session.get(url, ssl=False) as resp:                
+                rest_info = await resp.json()
+                yz['rest_info'] = rest_info
+        
+            async with session.get(url2, ssl=False) as resp_devices:                
+                rest_devices = await resp_devices.json()                
+                yz['rest_devices'] = rest_devices
+        
+            async with session.get(url3, ssl=False) as resp_scenes:                
+                rest_scenes = await resp_scenes.json()                
+                yz['rest_scenes'] = rest_scenes                
+                logging.warning('REST_API: %s', yz)
+                #service_data = {'entity_id': 'input_select.ledfx_seceneselector' ,'options': ['off' 'on']}
+                #hass.services.call('input_select', 'set_options', service_data)
+                logging.warning('REST_API: %s', yz)
+        
+        return {'info':rest_info, 'devices': rest_devices, 'scenes': rest_scenes}
+
+
 class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
     """Class to manage fetching data from the API."""
-
-    def __init__(self, hass, thehost, theport):
+    def __init__(self, hass: HomeAssistant, thehost, theport):
         """Initialize."""
-        #self.api = get_rest_status(thehost, theport)
+        
+        self.thehost = thehost
+        self.theport = theport
+        logging.warning('host port ::: %s ::: %s', thehost, str(theport))
+        self.api = myClient(thehost, theport)
         self.platforms = []
         #logging.warning('Good things done! Bad things start now:')
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=SCAN_INTERVAL)
 
     async def _async_update_data(self):
         """Update data via library."""
-        # try:
-        #     data = await self.api.async_get_data()
-        #     logging.warning('BOOOOM %s', data.json())
-        #     return data.get("data", {})
-        # except Exception as exception:
-        #     raise UpdateFailed(exception)
+        try:
+            data = await self.api.update()
+            #logging.warning('BOOOOM %s', data)
+            return 
+        except Exception as exception:
+            raise UpdateFailed(exception)
         return {'host': '192.168.1.56'}
+        
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Handle removal of an entry."""
