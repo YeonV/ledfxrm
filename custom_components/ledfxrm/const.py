@@ -3,7 +3,7 @@
 NAME = "LedFX ReMote"
 DOMAIN = "ledfxrm"
 DOMAIN_DATA = f"{DOMAIN}_data"
-VERSION = "0.0.7"
+VERSION = "0.0.8"
 MANUFACTURER = "YeonV"
 
 ISSUE_URL = "https://github.com/YeonV/ledfxrm/issues"
@@ -11,17 +11,20 @@ ISSUE_URL = "https://github.com/YeonV/ledfxrm/issues"
 # Icons
 ICON_STRIP = "mdi:led-strip-variant"
 ICON_SCENE = "mdi:image-multiple-outline"
+ICON_ASCENE = "mdi:image-outline"
 ICON_POWER = "mdi:power"
 
 # Device classes
 BINARY_SENSOR_DEVICE_CLASS = "connectivity"
+SWITCH_DEVICE_CLASS = "outlet"
 
 # Platforms
 BINARY_SENSOR = "binary_sensor"
 INPUT_SELECT = "input_select"
 SENSOR = "sensor"
 SWITCH = "switch"
-PLATFORMS = [BINARY_SENSOR, SENSOR, SWITCH]
+LIGHT = "light"
+PLATFORMS = [BINARY_SENSOR, SENSOR, SWITCH, LIGHT]
 
 
 # Configuration and options

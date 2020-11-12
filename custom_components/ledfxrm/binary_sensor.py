@@ -19,7 +19,10 @@ async def async_setup_entry(hass, entry, async_add_devices):
 
 class LedfxrmBinarySensor(LedfxrmEntity, BinarySensorEntity ):
     """ledfxrm binary_sensor class."""
-
+    @property
+    def unique_id(self):
+        """Return a unique ID to use for this entity."""
+        return self.config_entry.entry_id + '_status'
     @property
     def name(self):
         """Return the name of the binary_sensor."""

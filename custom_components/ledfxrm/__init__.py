@@ -115,6 +115,7 @@ class myClient():
         self.theport = theport
         self.thestart = thestart
         self.thestop = thestop
+        self.connected = False
     async def update(self):
         #logging.warning('2222 host %s port: %s', self.thehost, str(self.theport))
         url = "http://" + self.thehost + ":" + str(self.theport) + "/api/info"
@@ -142,16 +143,30 @@ class myClient():
                 #hass.services.call('input_select', 'set_options', service_data)
                 
                 #logging.warning('REST_API: %s', yz)
-        
+        if len(rest_info) > 0:
+            self.connected = True
         return {'info':rest_info, 'devices': rest_devices, 'scenes': rest_scenes}
     async def async_change_something(self, state):
+        logging.warning('STATE CHANGE: %s', state)
         if state is True:
             logging.warning('Start Button will soon do: %s', self.thestart)
+            self.connected = True
             return True
         if state is False:
+            self.connected = False
             logging.warning('Stop Button will soon do: %s', self.thestop)
             return False
-
+            
+    async def async_set_scene(self, effect):
+        if effect is None:
+            return
+        logging.warning('Setting Scene to %s', effect)
+        url3 = "http://" + self.thehost + ":" + str(self.theport) + "/api/scenes"
+        async with session.put(url3, json={"id": effect, "action": "activate"}, ssl=False) as resp_scenes:                
+            res_set_scene = await resp_scenes.json()                
+            logging.warning('Set Scene to %s', res_set_scene)
+        return None
+        
 class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
     """Class to manage fetching data from the API."""
     def __init__(self, hass: HomeAssistant, thehost, theport, theversion, thestart, thestop):
@@ -172,12 +187,12 @@ class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
         try:
             data = await self.api.update()
             
-            scenenames = data.get('scenes').get('scenes')
+            scenes = data.get('scenes').get('scenes')
             #logging.warning('SCENES %s', scenenames)
             #logging.warning('NUMBER OF SCENES %s', len(scenenames))
             
-            self.scenes = scenenames
-            self.number_scenes = len(scenenames)
+            self.scenes = scenes
+            self.number_scenes = len(scenes)
             return data
         except Exception as exception:
             raise UpdateFailed(exception)
