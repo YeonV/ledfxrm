@@ -40,7 +40,9 @@ A picklist is created/upadted and filled with the scenes
 
 [Frenck](https://github.com/frenck)
 
-[Tinkerer](https://github.com/DubhAd/)
+[On](https://github.com/OnFreund)
+
+[Tinkerer](https://github.com/DubhAd)
 
 https://github.com/ahodges9/LedFx/tree/dev/ledfx
 

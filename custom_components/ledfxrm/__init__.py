@@ -9,6 +9,8 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import Config, HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant import bootstrap
+
 
 from custom_components.ledfxrm.const import (
     DOMAIN,
@@ -40,7 +42,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     theversion = entry.data.get('version')
     thestart = entry.data.get('start')
     thestop = entry.data.get('stop')
-    
+
     coordinator = LedfxrmDataUpdateCoordinator(
         hass, thehost, theport, theversion, thestart, thestop
     )
@@ -61,6 +63,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     return True
 
 
+
 class myClient():
     def __init__(self, thehost, theport, thestart, thestop):
         self.thehost = thehost
@@ -68,6 +71,7 @@ class myClient():
         self.thestart = thestart
         self.thestop = thestop
         self.connected = False
+        self.effect = 'off'
         
     async def update(self):
         url = "http://" + self.thehost + ":" + str(self.theport) + "/api/info"
@@ -96,7 +100,6 @@ class myClient():
         return {'info':rest_info, 'devices': rest_devices, 'scenes': rest_scenes}
         
     async def async_change_something(self, state):
-        logging.warning('STATE CHANGE: %s', state)
         if state is True:
             logging.warning('Start Button will soon do: %s', self.thestart)
             self.connected = True
@@ -109,11 +112,12 @@ class myClient():
     async def async_set_scene(self, effect):
         if effect is None:
             return
-        logging.warning('Setting Scene to %s', effect)
         url3 = "http://" + self.thehost + ":" + str(self.theport) + "/api/scenes"
-        async with session.put(url3, json={"id": effect, "action": "activate"}, ssl=False) as resp_scenes:                
-            res_set_scene = await resp_scenes.json()                
-            logging.warning('Set Scene to %s', res_set_scene)
+        loop = asyncio.get_event_loop()
+        async with aiohttp.ClientSession(loop=loop, trust_env = True) as session:
+            async with session.put(url3, json={"id": effect, "action": "activate"}, ssl=False) as resp_scenes:                
+                res_set_scene = await resp_scenes.json()     
+                self.effect = effect
         return None
         
 class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
@@ -135,6 +139,7 @@ class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
             data = await self.api.update()
             scenes = data.get('scenes').get('scenes')
             self.scenes = scenes
+            
             self.number_scenes = len(scenes)
             return data
         except Exception as exception:

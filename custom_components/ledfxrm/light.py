@@ -17,6 +17,11 @@ class LedfxrmBinaryLight(LedfxrmEntity, LightEntity):
     
     async def async_turn_on(self, **kwargs):  # pylint: disable=unused-argument
         """Turn on the switch."""
+        if ATTR_EFFECT in kwargs:
+            await self.coordinator.api.async_set_scene(kwargs['effect'])
+            await self.coordinator.async_request_refresh()
+            return True
+            
         await self.coordinator.api.async_change_something(True)
         await self.coordinator.async_request_refresh()
         
@@ -26,13 +31,7 @@ class LedfxrmBinaryLight(LedfxrmEntity, LightEntity):
         await self.coordinator.api.async_change_something(False)
         await self.coordinator.async_request_refresh()
     
-    async def async_set_effect(self, effect):
-        """Activate effect."""
-        logging.warning('EFFECT SELECTED: %s', effect)
-        if not effect:
-            return
-        
-        await self.coordinator.api.async_set_scene(effect)
+
         
     @property
     def supported_features(self) -> int:
@@ -53,6 +52,11 @@ class LedfxrmBinaryLight(LedfxrmEntity, LightEntity):
     def icon(self):
         """Return the icon of this light."""
         return ICON_ASCENE
+        
+    @property
+    def effect(self):
+        """Return the current effect."""
+        return self.coordinator.api.effect
 
     @property
     def effect_list(self):
