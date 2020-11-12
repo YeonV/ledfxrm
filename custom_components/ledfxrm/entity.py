@@ -11,13 +11,6 @@ class LedfxrmEntity(CoordinatorEntity):
         self.config_entry = config_entry
         self.entity_id = "ledfxrm.ledfxrm"
 
-    #@property
-    #def unique_id(self):
-    #    """Return a unique ID to use for this entity."""
-    #    return self.config_entry.entry_id
-    
-    #@property
-    
     @property
     def device_info(self):
         return {

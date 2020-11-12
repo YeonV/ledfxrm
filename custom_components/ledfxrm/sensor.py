@@ -6,14 +6,7 @@ from typing import Any, Callable, Dict, List, Optional
 async def async_setup_entry( hass, entry, async_add_devices):
     """Setup sensor platform."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
-    #async_add_devices([LedfxrmSensor(coordinator, entry)])
-    
     async_add_devices([LedfxrmSensor(coordinator, entry),LedfxrmDeviceSensor(coordinator, entry)])
-    
-    
-    #scenenames = coordinator.data.get('scenes').get('scenes')
-    #hass.states.set('input_select.ledfxrm_scenes', 'off',{ 'friendly_name': 'LedFX--Scenes', 'icon': 'mdi:image-multiple-outline', 'initial': 'off', 'options': scenenames })
- 
 
 class LedfxrmDeviceSensor(LedfxrmEntity):
     """ledfxrm Sensor class."""
@@ -59,12 +52,3 @@ class LedfxrmSensor(LedfxrmEntity):
     def icon(self):
         """Return the icon of the sensor."""
         return ICON_SCENE
-    #@property
-    #def device_state_attributes(self) -> Optional[Dict[str, Any]]:
-    #    """Return the state attributes of the entity."""
-    #    scenenames = self.coordinator.data.get('scenes').get('scenes')
-    #    devicenames = self.coordinator.data.get('devices').get('devices')
-    #    return {
-    #        NUMBER_SCENES: len(scenenames),
-    #        NUMBER_DEVICES: len(devicenames),
-    #    }

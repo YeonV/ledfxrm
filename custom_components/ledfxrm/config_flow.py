@@ -10,15 +10,11 @@ import requests
 from custom_components.ledfxrm.const import (  # pylint: disable=unused-import
     CONF_HOST,
     CONF_PORT,
+    CONF_START,
+    CONF_STOP,
     DOMAIN,
     PLATFORMS,
 )
-
-YZSTART = "start"
-YZSTOP = "stop"
-YZHOST = "host"
-YZPORT = "port"
-
 
 class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     """Config flow for Ledfxrm."""
@@ -28,7 +24,6 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
     def __init__(self):
         """Initialize."""
-        #logging.warning('Config FLOW!!!')
         self._errors = {}
         
     async def async_step_user( self, user_input=None ):
@@ -39,23 +34,13 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             return self.async_abort(reason="single_instance_allowed")
 
         if user_input is not None:
-            #logging.warning('UserInput: %s', user_input[YZHOST)
-            #logging.warning('UserInput: %s', user_input[YZPORT])
-            name, version = await self.get_rest_status(
-                user_input[YZHOST], user_input[YZPORT]
-            )
+            name, version = await self.get_rest_status(user_input[CONF_HOST], user_input[CONF_PORT])
             if name:
-                #service_data = {'entity_id': 'input_select.ledfx_seceneselector' ,'options': api['rest_scenes']}
-                #hass.services.call('input_select', 'set_options', service_data)
-                data_attr = {YZHOST: user_input[YZHOST], YZPORT: user_input[YZPORT], 'version': version, 'name': name, 'start': user_input[YZSTART], 'stop': user_input[YZSTOP]}
-                return self.async_create_entry(
-                    title=name, data= data_attr
-                )
+                data_attr = {CONF_HOST: user_input[CONF_HOST], CONF_PORT: user_input[CONF_PORT], 'version': version, 'name': name, 'start': user_input[CONF_START], 'stop': user_input[CONF_STOP]}
+                return self.async_create_entry(title=name, data= data_attr)
             else:
                 self._errors["base"] = "auth"
-
             return await self._show_config_form(user_input)
-
         return await self._show_config_form(user_input)
 
     @staticmethod
@@ -69,21 +54,18 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             step_id="user",
             data_schema=vol.Schema(
                 {
-                    vol.Required(YZHOST, default="192.168.1.56"): str,
-                    vol.Required(YZPORT, default=8888): int,
-                    vol.Required(YZSTART, default="command to start server"): str,
-                    vol.Required(YZSTOP, default="command to kill server"): str
+                    vol.Required(CONF_HOST, default="192.168.1.56"): str,
+                    vol.Required(CONF_PORT, default=8888): int,
+                    vol.Required(CONF_START, default="command to start server"): str,
+                    vol.Required(CONF_STOP, default="command to kill server"): str
                 }
             ),
             errors=self._errors,
         )
-        
     
             
     async def get_rest_status(self, thehost, theport):
         """Return true if credentials is valid."""
-        # logging.warning('Host: %s', thehost)
-        # logging.warning('Port: %s', str(theport))
         loop = asyncio.get_event_loop()
         url = "http://" + thehost + ":" + str(theport) + "/api/info"
         async with aiohttp.ClientSession(loop=loop, trust_env = True) as session:
@@ -91,10 +73,9 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 rest_info = await resp.json()
                 name = rest_info['name']
                 version = rest_info['version']
-                logging.warning('Config for %s | Version: %s', name, version)
+                # logging.warning('Config for %s | Version: %s', name, version)
         #return yz
         return name, version
-        
 
 
 class LedfxrmOptionsFlowHandler(config_entries.OptionsFlow):

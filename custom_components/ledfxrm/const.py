@@ -31,6 +31,8 @@ PLATFORMS = [BINARY_SENSOR, SENSOR, SWITCH, LIGHT]
 CONF_ENABLED = "enabled"
 CONF_HOST = "host"
 CONF_PORT = "port"
+CONF_START = "start"
+CONF_STOP = "stop"
 
 # Defaults
 DEFAULT_NAME = DOMAIN
