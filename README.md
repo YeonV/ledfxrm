@@ -7,7 +7,7 @@
 ![version](https://img.shields.io/badge/a.k.a-Blade-blue.svg)
 
 ---
-### [Custom Integration](https://github.com/hacs/integration) for [Home Assistant](https://github.com/home-assistant) to control a any (local/remote) [ledfx-server](https://github.com/ahodges9/LedFx)
+### [Custom Integration](https://github.com/hacs/integration) for [Home Assistant](https://github.com/home-assistant) to control a any (local/remote) [LedFX-server](https://github.com/ahodges9/LedFx)
 ---
 
 
