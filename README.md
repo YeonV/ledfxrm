@@ -1,42 +1,35 @@
-# Removed ALL functionality!!
-# Refactoring to be a real HomAssistant Integration installable via HACS
-last working state: https://github.com/YeonV/ledfxrm/commit/43a0c9dd9746070e5744d202ebd4aead4bbfa05e
-
----
-
 # LedFX Remote for HomeAssistant
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/custom-components/hacs)
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-blue.svg)](https://github.com/custom-components/hacs)
+![hacs_badge](https://img.shields.io/badge/STATE-alpha-blue.svg)
+![version](https://img.shields.io/badge/VERSION-0.1.0-blue.svg)
+![version](https://img.shields.io/badge/CREATOR-Yeon-blue.svg)
+![version](https://img.shields.io/badge/a.k.a-Blade-blue.svg)
+
+---
+## [Custom Integration](https://github.com/hacs/integration) for [Home Assistant](https://github.com/home-assistant) to control a any (local/remote) [ledfx-server](https://github.com/ahodges9/LedFx)
+---
 
 
-A proof of concept, for controlling a remote [ledfx-server](https://github.com/ahodges9/LedFx) via [Home Assistant](https://github.com/home-assistant)
 
-### How to
+# How to
 
-- copy this folder inside custom_compontents
-- at the moment a lot of manual work is needed:
-  - add `ledfxrm:` to your configuration.yml
-  - edit this __init__.py and change your IP
-  - inside this file there are comment-snippets
-  - create the rest_command, input_select and automation as showed in those snippets
-  - sent a MQTT message to `blade/ledfx/info` to trigger the sync  
-  
-Refactoring this sh.t asap
+- Install via Hacs
+- Goto Hass-Config-Integration -> Add -> Ledfx Remote
+- Fill Ip & port (LedFX Server needs to online)
+  - no changes in configuration.yaml needed 
+  - all Settings are handled via UI
+- Open the light entity and change your scenes :)
 
-### What does it do?
+# Screens
 
-When the sync runs, 3 API-endpoints of ledfx are fetched: info, devices, scenes
-A Summary-Entity is created with those infos:
+![integration](docs/integration.png)
 
-![summary](https://user-images.githubusercontent.com/28861537/98367840-9c726e80-2036-11eb-9121-6b8aaddbbdfd.png)
+![main](docs/main.png)
 
-A picklist is created/upadted and filled with the scenes
+![scenes](docs/scenes.png)
 
-![dropdown](https://user-images.githubusercontent.com/28861537/98367833-98465100-2036-11eb-8a6b-ad538dd31960.png)
-
-=> changing the dropdown will activate the selected scene.
-
-### Credits
+# Credits
 
 [Frenck](https://github.com/frenck)
 
