@@ -26,7 +26,6 @@
 ![integration](docs/integration.png)
 
 ![main](docs/main.png)
-
 ![scenes](docs/scenes.png)
 
 # Credits
