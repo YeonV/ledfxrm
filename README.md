@@ -1,4 +1,4 @@
-# LedFX Remote for HomeAssistant
+# LedFX ReMote for HomeAssistant
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-blue.svg)](https://github.com/custom-components/hacs)
 ![hacs_badge](https://img.shields.io/badge/STATE-alpha-blue.svg)
