@@ -1,10 +1,10 @@
 # LedFX ReMote for HomeAssistant
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-blue.svg)](https://github.com/custom-components/hacs)
-![hacs_badge](https://img.shields.io/badge/STATE-alpha-blue.svg)
+![state](https://img.shields.io/badge/STATE-alpha-blue.svg)
 ![version](https://img.shields.io/badge/VERSION-0.1.0-blue.svg)
-![version](https://img.shields.io/badge/CREATOR-Yeon-blue.svg)
-![version](https://img.shields.io/badge/a.k.a-Blade-blue.svg)
+![creator](https://img.shields.io/badge/CREATOR-Yeon-blue.svg)
+![creator](https://img.shields.io/badge/a.k.a-Blade-blue.svg)
 
 ---
 
