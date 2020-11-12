@@ -77,6 +77,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     thehost = entry.data.get('host')
     theport = entry.data.get('port')
     theversion = entry.data.get('version')
+    thestart = entry.data.get('start')
+    thestop = entry.data.get('stop')
     
     #theurl = entry.data.get('rest_info').get('url')
     #thehost, theport = split_host_port(theurl)
@@ -87,7 +89,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     #logging.warning('Version %s ', theversion )
     
     coordinator = LedfxrmDataUpdateCoordinator(
-        hass, thehost, theport, theversion
+        hass, thehost, theport, theversion, thestart, thestop
     )
     await coordinator.async_refresh()
     
@@ -108,9 +110,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
 
 class myClient():
-    def __init__(self, thehost, theport):
+    def __init__(self, thehost, theport, thestart, thestop):
         self.thehost = thehost
         self.theport = theport
+        self.thestart = thestart
+        self.thestop = thestop
     async def update(self):
         #logging.warning('2222 host %s port: %s', self.thehost, str(self.theport))
         url = "http://" + self.thehost + ":" + str(self.theport) + "/api/info"
@@ -141,19 +145,24 @@ class myClient():
         
         return {'info':rest_info, 'devices': rest_devices, 'scenes': rest_scenes}
     async def async_change_something(self, state):
-        logging.warning('BOOOOM: %s', state)
-        
-        return {'status': 'ok'}
+        if state is True:
+            logging.warning('Start Button will soon do: %s', self.thestart)
+            return True
+        if state is False:
+            logging.warning('Stop Button will soon do: %s', self.thestop)
+            return False
 
 class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
     """Class to manage fetching data from the API."""
-    def __init__(self, hass: HomeAssistant, thehost, theport, theversion):
+    def __init__(self, hass: HomeAssistant, thehost, theport, theversion, thestart, thestop):
         """Initialize."""
         self.theversion = theversion
         self.thehost = thehost
         self.theport = theport
+        self.thestop = thestop
+        self.thestart = thestart
         #logging.warning('host port ::: %s ::: %s', thehost, str(theport))
-        self.api = myClient(thehost, theport)
+        self.api = myClient(thehost, theport, thestart, thestop)
         self.platforms = []
         #logging.warning('Good things done! Bad things start now:')
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=SCAN_INTERVAL)
@@ -162,7 +171,13 @@ class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
         """Update data via library."""
         try:
             data = await self.api.update()
-            #logging.warning('BOOOOM %s', data)
+            
+            scenenames = data.get('scenes').get('scenes')
+            #logging.warning('SCENES %s', scenenames)
+            #logging.warning('NUMBER OF SCENES %s', len(scenenames))
+            
+            self.scenes = scenenames
+            self.number_scenes = len(scenenames)
             return data
         except Exception as exception:
             raise UpdateFailed(exception)

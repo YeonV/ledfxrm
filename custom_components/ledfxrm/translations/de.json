@@ -10,8 +10,8 @@
                     "theport": 8888,
                     "host": "Host",
                     "port": "Port",
-                    "namea": "Name 1",
-                    "nameb": "Name 2"
+                    "start": "Start Server",
+                    "stop": "Kill Server"
                 }
             }
         },

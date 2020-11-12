@@ -14,8 +14,8 @@ from custom_components.ledfxrm.const import (  # pylint: disable=unused-import
     PLATFORMS,
 )
 
-YZNAME = "namea"
-YZNAMEB = "nameb"
+YZSTART = "start"
+YZSTOP = "stop"
 YZHOST = "host"
 YZPORT = "port"
 
@@ -39,15 +39,15 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             return self.async_abort(reason="single_instance_allowed")
 
         if user_input is not None:
-            #logging.warning('UserInput: %s', user_input['host'])
-            #logging.warning('UserInput: %s', user_input['port'])
+            #logging.warning('UserInput: %s', user_input[YZHOST)
+            #logging.warning('UserInput: %s', user_input[YZPORT])
             name, version = await self.get_rest_status(
-                user_input['host'], user_input['port']
+                user_input[YZHOST], user_input[YZPORT]
             )
             if name:
                 #service_data = {'entity_id': 'input_select.ledfx_seceneselector' ,'options': api['rest_scenes']}
                 #hass.services.call('input_select', 'set_options', service_data)
-                data_attr = {'host': user_input['host'], 'port': user_input['port'], 'version': version, 'name': name}
+                data_attr = {YZHOST: user_input[YZHOST], YZPORT: user_input[YZPORT], 'version': version, 'name': name, 'start': user_input[YZSTART], 'stop': user_input[YZSTOP]}
                 return self.async_create_entry(
                     title=name, data= data_attr
                 )
@@ -68,7 +68,12 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="user",
             data_schema=vol.Schema(
-                {vol.Required(YZHOST, default="192.168.1.56"): str, vol.Required(YZPORT, default=8888): int}
+                {
+                    vol.Required(YZHOST, default="192.168.1.56"): str,
+                    vol.Required(YZPORT, default=8888): int,
+                    vol.Required(YZSTART, default="command to start server"): str,
+                    vol.Required(YZSTOP, default="command to kill server"): str
+                }
             ),
             errors=self._errors,
         )

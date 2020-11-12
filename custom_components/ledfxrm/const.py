@@ -3,7 +3,7 @@
 NAME = "LedFX ReMote"
 DOMAIN = "ledfxrm"
 DOMAIN_DATA = f"{DOMAIN}_data"
-VERSION = "0.0.6"
+VERSION = "0.0.7"
 MANUFACTURER = "YeonV"
 
 ISSUE_URL = "https://github.com/YeonV/ledfxrm/issues"
@@ -31,6 +31,10 @@ CONF_PORT = "port"
 
 # Defaults
 DEFAULT_NAME = DOMAIN
+
+NUMBER_SCENES = "Number of Scenes"
+NUMBER_DEVICES = "Number of Devices"
+START_KILL_SERVER = "Start/Stop Server"
 
 
 STARTUP_MESSAGE = f"""

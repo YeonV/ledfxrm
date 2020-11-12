@@ -1,9 +1,9 @@
 """Switch platform for ledfxrm."""
 from homeassistant.components.switch import SwitchEntity
 
-from custom_components.ledfxrm.const import DEFAULT_NAME, DOMAIN, ICON_POWER, SWITCH
+from custom_components.ledfxrm.const import DEFAULT_NAME, DOMAIN, ICON_POWER, SWITCH, START_KILL_SERVER
 from custom_components.ledfxrm.entity import LedfxrmEntity
-
+import logging
 
 async def async_setup_entry(hass, entry, async_add_devices):
     """Setup sensor platform."""
@@ -27,7 +27,7 @@ class LedfxrmBinarySwitch(LedfxrmEntity, SwitchEntity):
     @property
     def name(self):
         """Return the name of the switch."""
-        return f"{DEFAULT_NAME}_{SWITCH}"
+        return START_KILL_SERVER
 
     @property
     def icon(self):

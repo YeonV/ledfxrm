@@ -33,7 +33,7 @@ class LedfxrmBinarySensor(LedfxrmEntity, BinarySensorEntity ):
     @property
     def is_on(self):
         """Return true if the binary_sensor is on."""
-        logging.warning('YZ: %s', self.coordinator.data)
+        #logging.warning('YZ: %s', self.coordinator.data)
         if self.coordinator.data.get("info").get("version") is None:
             return False
         return True
