@@ -61,9 +61,16 @@
 
 ![integration](docs/integration.png)
 
+<details><summary>show more</summary>
+<p>
+
 ![main](docs/main.png)
 
 ![scenes](docs/scenes.png)
+
+</p>
+</details>
+
 
 # Credits
 
