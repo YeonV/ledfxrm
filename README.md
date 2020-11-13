@@ -39,6 +39,12 @@
   - Create a Sync-Button to manually trigger a request
   - Add more `POST` and `PUT` calls
 
+# Requirements:
+
+- [LedFX] with at least one scene setup
+- [hass](https://github.com/home-assistant) - (HomeAssistant)
+- [HACS](https://hacs.xyz/) - (HomeAssistantCommunityStore)
+
 # QuickStart
 
 - Install via Hacs
