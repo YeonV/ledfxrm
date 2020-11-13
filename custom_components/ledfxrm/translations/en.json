@@ -1,22 +1,23 @@
 {
     "config": {
-        "title": "Ledfxrm",
+        "title": "LedFX Remote",
         "step": {
             "user": {
-                "title": "Ledfxrm",
-                "description": "If you need help with the configuration have a look here: https://github.com/YeonV/ledfxrm",
+                "title": "LedFX Remote - Setup",
+                "description": "Welcome\nPlease make sure you meet the requirements:\n- LedFX Server up and running\n- At lease one scene defined in LedFX\n- Change host in ledfx-confi-yaml from 127.0.0.1 to your IP\n (maybe 0.0.0.0 also work)\n alternativly you can start it with `ledfx --host 0.0.0.0`\n\nIf you need help with the configuration have a look here: https://github.com/YeonV/ledfxrm",
                 "data": {
                     "thehost": "192.168.1.56",
                     "theport": 8888,
                     "host": "Host",
                     "port": "Port",
-                    "start": "Start Server",
-                    "stop": "Kill Server"
+                    "start": "NOT READY YET - just a log-dummy: Start Server",
+                    "stop": "NOT READY YET - just a log-dummy: Kill Server",
+                    "advanced": "Devmode"
                 }
             }
         },
         "error": {
-            "auth": "Host/Port wrong."
+            "auth": "Cannot connect to LedFX."
         },
         "abort": {
             "single_instance_allowed": "Only a single configuration of Ledfxrm is allowed."
