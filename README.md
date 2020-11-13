@@ -41,7 +41,7 @@
 
 # Requirements:
 
-- [LedFX] with at least one scene setup
+- [LedFX](https://github.com/ahodges9/LedFx) with at least one scene setup
 - [hass](https://github.com/home-assistant) - (HomeAssistant)
 - [HACS](https://hacs.xyz/) - (HomeAssistantCommunityStore)
 
