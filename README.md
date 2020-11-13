@@ -1,10 +1,11 @@
 # LedFX ReMote for HomeAssistant
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-blue.svg)](https://github.com/custom-components/hacs)
-![state](https://img.shields.io/badge/STATE-alpha-blue.svg)
-![version](https://img.shields.io/badge/VERSION-0.1.0-blue.svg)
-![creator](https://img.shields.io/badge/CREATOR-Yeon-blue.svg)
-![creator](https://img.shields.io/badge/a.k.a-Blade-blue.svg)
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-blue.svg)](https://github.com/custom-components/hacs) 
+![state](https://img.shields.io/badge/STATE-alpha-blue.svg) 
+![version](https://img.shields.io/badge/VERSION-0.1.0-blue.svg) 
+[![license](https://img.shields.io/badge/LICENSE-MIT-blue.svg)](https://github.com/YeonV/ledfxrm/blob/main/LICENSE) 
+[![creator](https://img.shields.io/badge/CREATOR-Yeon-blue.svg)](https://github.com/YeonV) 
+[![creator](https://img.shields.io/badge/a.k.a-Blade-blue.svg)](https://github.com/YeonV) 
 
 ---
 
@@ -66,18 +67,23 @@
 
 # Credits
 
-[Frenck](https://github.com/frenck)
+[![ledfx-github](https://img.shields.io/badge/Github-LedFX-blue.svg)](https://github.com/ahodges9/LedFx/tree/dev/ledfx)
+[![ledfx-discord](https://img.shields.io/badge/Discord-LedFX-blue.svg)](https://discord.gg/wJ755dY)
 
-[On](https://github.com/OnFreund)
+[![wled-github](https://img.shields.io/badge/Github-WLED-blue.svg)](https://github.com/Aircoookie/WLED)
+[![wled-discord](https://img.shields.io/badge/Discord-WLED-blue.svg)](https://discord.gg/KuqP7NE)
 
-[Tinkerer](https://github.com/DubhAd)
+[![blueprint-github](https://img.shields.io/badge/Github-HomeAssistant-blue.svg)](https://github.com/home-assistant)
 
-https://github.com/ahodges9/LedFx/tree/dev/ledfx
+[![blueprint-github](https://img.shields.io/badge/Github-HACS-blue.svg)](https://github.com/hacs/)
 
-https://github.com/Aircoookie/WLED
+[![blueprint-github](https://img.shields.io/badge/Github-blueprint-blue.svg)](https://github.com/custom-components/blueprint)
 
-https://github.com/custom-components/blueprint
 
-https://github.com/hacs/
+# Special Thanks
 
-https://github.com/home-assistant
+[![frenck](https://img.shields.io/badge/Github-Frenck-blue.svg)](https://github.com/frenck)
+
+[![on](https://img.shields.io/badge/Github-On-blue.svg)](https://github.com/OnFreund)
+
+[![Tinkerer](https://img.shields.io/badge/Github-Tinkerer-blue.svg)](https://github.com/DubhAd)
