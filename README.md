@@ -18,7 +18,7 @@
 
 - Everything configurable via UI
 - AutoConnect to 3 LedFX-Rest-API-Endpoints
-- AutoGather Informations from all Endpoint
+- Automatically `GET` Informations from all Endpoints
 - AutoCreate Entities:
   - Binary Sensor (Is LedFX online?)
   - Devices Sensor (Number of Devices inside LedFX)
@@ -27,7 +27,7 @@
   - Light 
     - EffectList (Filled with scenes from LedFX)
     - On/Off mirrors Switch - upcoming feature
-- EffectList-Change will fire LedFX via API
+- EffectList-Change will fire LedFX via `PUT`
 
 # Upcoming Features
 
@@ -37,6 +37,7 @@
   - Make SCAN_INTERVAL editable via UI
   - Allow disable poll (If you have everything setup in ledfx, there is no need to poll for new infos all the time)
   - Create a Sync-Button to manually trigger a request
+  - Add more `POST` and `PUT` calls
 
 # QuickStart
 
