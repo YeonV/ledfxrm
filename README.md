@@ -42,7 +42,9 @@
 
 # Requirements:
 
-- [LedFX](https://github.com/ahodges9/LedFx) with at least one scene setup
+- [LedFX](https://github.com/ahodges9/LedFx) 
+  - with at least one scene setup
+  - the ledfx config yaml defines your host to 127.0.0.1 per default. You need to change it to your IP (or maybe 0.0.0.0 will also work)
 - [hass](https://github.com/home-assistant) - (HomeAssistant)
 - [HACS](https://hacs.xyz/) - (HomeAssistantCommunityStore)
 
