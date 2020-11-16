@@ -16,6 +16,7 @@ from custom_components.ledfxrm.const import (
     DOMAIN,
     PLATFORMS,
     STARTUP_MESSAGE,
+    SWITCH
 )
 
 SCAN_INTERVAL = timedelta(seconds=30)
@@ -55,6 +56,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
     for platform in PLATFORMS:
         if entry.options.get(platform, True):
+            if platform is SWITCH:
+                if thestart is None:
+                    continue
+                if thestart == '192.168.1.56:1337/?ledfxstart':
+                    continue
             coordinator.platforms.append(platform)
             hass.async_add_job(
                 hass.config_entries.async_forward_entry_setup(entry, platform)
