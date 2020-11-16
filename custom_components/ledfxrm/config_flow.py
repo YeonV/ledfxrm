@@ -56,8 +56,8 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 {
                     vol.Required(CONF_HOST, default="192.168.1.56"): str,
                     vol.Required(CONF_PORT, default=8888): int,
-                    vol.Required(CONF_START, default="command to start server"): str,
-                    vol.Required(CONF_STOP, default="command to kill server"): str
+                    vol.Required(CONF_START, default="192.168.1.56:1337/?ledfxstart"): str,
+                    vol.Required(CONF_STOP, default="192.168.1.56:1337/?ledfxstop"): str
                 }
             ),
             errors=self._errors,

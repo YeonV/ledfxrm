@@ -4,14 +4,14 @@
         "step": {
             "user": {
                 "title": "LedFX Remote - Setup",
-                "description": "Welcome\nPlease make sure you meet the requirements:\n- LedFX Server up and running\n- At lease one scene defined in LedFX\n- Change host in ledfx-confi-yaml from 127.0.0.1 to your IP\n (maybe 0.0.0.0 also work)\n alternativly you can start it with `ledfx --host 0.0.0.0`\n\nIf you need help with the configuration have a look here: https://github.com/YeonV/ledfxrm",
+                "description": "Welcome\nPlease make sure you meet the requirements:\n- LedFX Server >0.7 up and running\n- At lease one scene defined in LedFX\n- Change host in ledfx-confi-yaml from 127.0.0.1 to your IP\n (maybe 0.0.0.0 also work)\n alternativly you can start it with `ledfx --host 0.0.0.0`\n\nIf you need help with the configuration have a look here: https://github.com/YeonV/ledfxrm",
                 "data": {
                     "thehost": "192.168.1.56",
                     "theport": 8888,
                     "host": "Host",
                     "port": "Port",
-                    "start": "NOT READY YET - just a log-dummy: Start Server",
-                    "stop": "NOT READY YET - just a log-dummy: Kill Server",
+                    "start": "GET Endpoint: Start Server",
+                    "stop": "GET Endpoint: Kill Server",
                     "advanced": "Devmode"
                 }
             }

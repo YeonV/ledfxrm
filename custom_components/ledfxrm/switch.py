@@ -31,10 +31,10 @@ class LedfxrmBinarySwitch(LedfxrmEntity, SwitchEntity):
         return self.config_entry.entry_id + '_switch'
     
     # Wait until one can change the Icon of the On/Off buttons
-    #@property
-    #def assumed_state(self):
-    #    """Return the name of the switch."""
-    #    return True
+    @property
+    def assumed_state(self):
+        """Return the name of the switch."""
+        return True
     
     @property
     def name(self):

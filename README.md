@@ -2,7 +2,7 @@
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-blue.svg)](https://github.com/custom-components/hacs) 
 ![state](https://img.shields.io/badge/STATE-alpha-blue.svg) 
-![version](https://img.shields.io/badge/VERSION-0.1.1-blue.svg) 
+![version](https://img.shields.io/badge/VERSION-0.1.2-blue.svg) 
 [![license](https://img.shields.io/badge/LICENSE-MIT-blue.svg)](https://github.com/YeonV/ledfxrm/blob/main/LICENSE) 
 [![creator](https://img.shields.io/badge/CREATOR-Yeon-blue.svg)](https://github.com/YeonV) 
 [![creator](https://img.shields.io/badge/a.k.a-Blade-blue.svg)](https://github.com/YeonV) 

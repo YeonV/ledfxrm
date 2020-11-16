@@ -100,14 +100,17 @@ class myClient():
         return {'info':rest_info, 'devices': rest_devices, 'scenes': rest_scenes}
         
     async def async_change_something(self, state):
-        if state is True:
-            logging.warning('Start Button will soon do: %s', self.thestart)
-            self.connected = True
-            return True
-        if state is False:
-            self.connected = False
-            logging.warning('Stop Button will soon do: %s', self.thestop)
-            return False
+        loop = asyncio.get_event_loop()
+        async with aiohttp.ClientSession(loop=loop, trust_env = True) as session:
+            if state is True:
+                async with session.get("http://" + self.thestart, ssl=False) as resp_start:
+                    logging.debug('start: %s', resp_start)
+                return True
+            if state is False:
+                async with session.get("http://" + self.thestop, ssl=False) as resp_stop:
+                    logging.debug('stop: %s', resp_stop)
+        return None
+            
             
     async def async_set_scene(self, effect):
         if effect is None:
