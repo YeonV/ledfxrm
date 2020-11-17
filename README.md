@@ -1,6 +1,6 @@
 # LedFX ReMote for HomeAssistant
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-blue.svg)](https://github.com/custom-components/hacs) ![state](https://img.shields.io/badge/STATE-beta-blue.svg) ![version](https://img.shields.io/badge/VERSION-0.1.6-blue.svg) [![license](https://img.shields.io/badge/LICENSE-MIT-blue.svg)](https://github.com/YeonV/ledfxrm/blob/main/LICENSE) [![creator](https://img.shields.io/badge/CREATOR-Yeon-blue.svg)](https://github.com/YeonV) [![creator](https://img.shields.io/badge/a.k.a-Blade-blue.svg)](https://github.com/YeonV) 
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-blue.svg)](https://github.com/custom-components/hacs) ![state](https://img.shields.io/badge/STATE-beta-blue.svg) ![version](https://img.shields.io/github/v/release/YeonV/ledfxrm?label=VERSION&logo=git&logoColor=white) [![license](https://img.shields.io/badge/LICENSE-MIT-blue.svg)](https://github.com/YeonV/ledfxrm/blob/main/LICENSE) [![creator](https://img.shields.io/badge/CREATOR-Yeon-blue.svg)](https://github.com/YeonV) [![creator](https://img.shields.io/badge/a.k.a-Blade-blue.svg?logo=github&logoColor=white)](https://github.com/YeonV) 
 
 ---
 
@@ -73,23 +73,23 @@
 
 # Credits
 
-[![ledfx-github](https://img.shields.io/badge/Github-LedFX-blue.svg)](https://github.com/ahodges9/LedFx/tree/dev/ledfx)
-[![ledfx-discord](https://img.shields.io/badge/Discord-LedFX-blue.svg)](https://discord.gg/wJ755dY)
+[![ledfx-github](https://img.shields.io/badge/Github-LedFX-blue.svg?logo=github&logoColor=white)](https://github.com/ahodges9/LedFx/tree/dev/ledfx)
+[![ledfx-discord](https://img.shields.io/badge/Discord-LedFX-blue.svg?logo=discord&logoColor=white)](https://discord.gg/wJ755dY)
 
-[![wled-github](https://img.shields.io/badge/Github-WLED-blue.svg)](https://github.com/Aircoookie/WLED)
-[![wled-discord](https://img.shields.io/badge/Discord-WLED-blue.svg)](https://discord.gg/KuqP7NE)
+[![wled-github](https://img.shields.io/badge/Github-WLED-blue.svg?logo=github&logoColor=white)](https://github.com/Aircoookie/WLED)
+[![wled-discord](https://img.shields.io/badge/Discord-WLED-blue.svg?logo=discord&logoColor=white)](https://discord.gg/KuqP7NE)
 
-[![blueprint-github](https://img.shields.io/badge/Github-HomeAssistant-blue.svg)](https://github.com/home-assistant)
+[![blueprint-github](https://img.shields.io/badge/Github-HomeAssistant-blue.svg?logo=github&logoColor=white)](https://github.com/home-assistant)
 
-[![blueprint-github](https://img.shields.io/badge/Github-HACS-blue.svg)](https://github.com/hacs/)
+[![blueprint-github](https://img.shields.io/badge/Github-HACS-blue.svg?logo=github&logoColor=white)](https://github.com/hacs/)
 
-[![blueprint-github](https://img.shields.io/badge/Github-blueprint-blue.svg)](https://github.com/custom-components/blueprint)
+[![blueprint-github](https://img.shields.io/badge/Github-blueprint-blue.svg?logo=github&logoColor=white)](https://github.com/custom-components/blueprint)
 
 
 # Special Thanks
 
-[![frenck](https://img.shields.io/badge/Github-Frenck-blue.svg)](https://github.com/frenck)
+[![frenck](https://img.shields.io/badge/Github-Frenck-blue.svg?logo=github&logoColor=white)](https://github.com/frenck)
 
-[![on](https://img.shields.io/badge/Github-On-blue.svg)](https://github.com/OnFreund)
+[![on](https://img.shields.io/badge/Github-On-blue.svg?logo=github&logoColor=white)](https://github.com/OnFreund)
 
-[![Tinkerer](https://img.shields.io/badge/Github-Tinkerer-blue.svg)](https://github.com/DubhAd)
+[![Tinkerer](https://img.shields.io/badge/Github-Tinkerer-blue.svg?logo=github&logoColor=white)](https://github.com/DubhAd)
