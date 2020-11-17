@@ -20,8 +20,6 @@ from custom_components.ledfxrm.const import (
     CONF_SCAN_INTERVAL
 )
 
-SCAN_INTERVAL = timedelta(seconds=300)
-
 _LOGGER = logging.getLogger(__name__)
 
 async def async_setup(hass: HomeAssistant, config: Config):
@@ -45,10 +43,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     thestart = entry.data.get('start')
     thestop = entry.data.get('stop')
     thescan = entry.data.get('scan_interval')
-    logging.warning('scaaannn1: %s', thescan)
+    
     coordinator = LedfxrmDataUpdateCoordinator(
         hass, thehost, theport, theversion, thestart, thestop, thescan
-        #hass, thehost, theport, theversion, thestart, thestop
     )
     
     await coordinator.async_refresh()
@@ -75,14 +72,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
 
 class myClient():
-    #def __init__(self, thehost, theport, thestart, thestop, thescan):
     def __init__(self, thehost, theport, thestart, thestop):
         self.thehost = thehost
         self.theport = theport
         self.thestart = thestart
         self.thestop = thestop
-        #self.thescan = thescan
-        #logging.warning('scaaannn2: %s', thescan)
         self.connected = False
         self.effect = 'off'
         
@@ -147,19 +141,16 @@ class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
         self.thestop = thestop
         self.thestart = thestart
         self.thescan = thescan
-        test = timedelta(seconds=self.thescan)
-        logging.warning('scaaannn3: %s', test)
+        scan_interval = timedelta(seconds=self.thescan)
         self.api = myClient(thehost, theport, thestart, thestop)
-        #self.api = myClient(thehost, theport, thestart, thestop, thescan)
         self.platforms = []
-        #super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=SCAN_INTERVAL)
-        super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=test)
+        super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=scan_interval)
 
     async def _async_update_data(self):
         """Update data via library."""
         
         try:
-            logging.warning('SCAN_INTERVAL_CHECK %s', self.thescan)
+            #logging.warning('SCAN_INTERVAL_CHECK %s', self.thescan)
             data = await self.api.update()
             scenes = data.get('scenes').get('scenes')
             self.scenes = scenes

@@ -106,7 +106,7 @@ class LedfxrmOptionsFlowHandler(config_entries.OptionsFlow):
             step_id="user",
             data_schema=vol.Schema(
                 {
-                    vol.Optional(CONF_SCAN_INTERVAL, default=self.options.get(CONF_SCAN_INTERVAL, 300)): int,
+                    #vol.Optional(CONF_SCAN_INTERVAL, default=self.options.get(CONF_SCAN_INTERVAL, 300)): int,
                     vol.Required(BINARY_SENSOR, default=self.options.get(BINARY_SENSOR, True)): bool,
                     vol.Required(SENSOR, default=self.options.get(SENSOR, True)): bool,
                     vol.Required(SWITCH, default=self.options.get(SWITCH, True)): bool,

@@ -11,7 +11,7 @@
                     "port": "Port",
                     "start": "GET Endpoint: Start Server",
                     "stop": "GET Endpoint: Kill Server",
-                    "scan_interval": "NOT READY YET: Scan interval in s",
+                    "scan_interval": "Scan interval in seconds",
                     "advanced": "Devmode"
                 }
             }
