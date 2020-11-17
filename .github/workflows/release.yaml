@@ -18,6 +18,7 @@ jobs:
         id: get_messages
         run: |
           git log --pretty=format:"%s" $(git describe --tags --abbrev=0 @^)..@ >> /tmp/messages.txt
+          cat /tmp/messages.txt
           echo 'MESSAGES<<EOF' >> $GITHUB_ENV
           cat /tmp/messages.txt >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
