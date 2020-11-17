@@ -13,6 +13,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Get commit-messages
+        id: get_messages
+        run: |
+          rm /tmp/messages.txt; git log --pretty=format:"%s" $(git describe --tags --abbrev=0 @^)..@ >> /tmp/messages.txt; cat /tmp/messages.txt >> $description
+          echo "::set-output name=description::$description"
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -22,6 +27,6 @@ jobs:
           tag_name: ${{ github.event.head_commit.message }}
           release_name: ${{ github.event.head_commit.message }}
           body: |
-            New Release
+            ${{ steps.get_messages.outputs.description }}
           draft: false
           prerelease: false
