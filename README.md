@@ -1,6 +1,6 @@
 # LedFX ReMote for HomeAssistant
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-blue.svg)](https://github.com/custom-components/hacs) ![state](https://img.shields.io/badge/STATE-beta-blue.svg) ![version](https://img.shields.io/badge/VERSION-0.1.3-blue.svg) [![license](https://img.shields.io/badge/LICENSE-MIT-blue.svg)](https://github.com/YeonV/ledfxrm/blob/main/LICENSE) [![creator](https://img.shields.io/badge/CREATOR-Yeon-blue.svg)](https://github.com/YeonV) [![creator](https://img.shields.io/badge/a.k.a-Blade-blue.svg)](https://github.com/YeonV) 
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-blue.svg)](https://github.com/custom-components/hacs) ![state](https://img.shields.io/badge/STATE-beta-blue.svg) ![version](https://img.shields.io/badge/VERSION-0.1.4-blue.svg) [![license](https://img.shields.io/badge/LICENSE-MIT-blue.svg)](https://github.com/YeonV/ledfxrm/blob/main/LICENSE) [![creator](https://img.shields.io/badge/CREATOR-Yeon-blue.svg)](https://github.com/YeonV) [![creator](https://img.shields.io/badge/a.k.a-Blade-blue.svg)](https://github.com/YeonV) 
 
 ---
 
