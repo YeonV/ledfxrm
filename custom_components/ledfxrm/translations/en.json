@@ -1,6 +1,5 @@
 {
     "config": {
-        "title": "LedFX Remote",
         "step": {
             "user": {
                 "title": "LedFX Remote - Setup",
