@@ -22,8 +22,7 @@ jobs:
           cat /tmp/messages.txt
           echo 'MESSAGES<<EOF' >> $GITHUB_ENV
           printf '%b\n' "$(cat /tmp/messages.txt)" >> $GITHUB_ENV
-          echo EOF >> $GITHUB_ENV
-                  
+          echo EOF >> $GITHUB_ENV                  
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
