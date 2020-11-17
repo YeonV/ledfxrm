@@ -24,7 +24,7 @@
   - Binary Sensor (Is LedFX online?)
   - Devices Sensor (Number of Devices inside LedFX)
   - Scenes Sensor (Number of Scenes inside LedFX)
-  - Switch (Upcoming feature! only logging functionality atm)
+  - Switch (if start/stop is set in config - `GET`-call)
   - Light 
     - EffectList (Filled with scenes from LedFX)
     - On/Off mirrors Switch - upcoming feature
@@ -32,7 +32,7 @@
 
 # Upcoming Features
 
-- Implement Server Start/Stop Commands
+- More settings in Server Start/Stop Commands
 - Make also use of the after setup config flow (options)
   - Allow editing of setup-settings
   - Make SCAN_INTERVAL editable via UI
