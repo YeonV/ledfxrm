@@ -16,7 +16,7 @@ jobs:
       - name: Get commit-messages
         id: get_messages
         run: |
-          rm /tmp/messages.txt; git log --pretty=format:"%s" $(git describe --tags --abbrev=0 @^)..@ >> /tmp/messages.txt; cat /tmp/messages.txt >> $description
+          git log --pretty=format:"%s" $(git describe --tags --abbrev=0 @^)..@ >> /tmp/messages.txt; cat /tmp/messages.txt >> $description
           echo "::set-output name=description::$description"
       - name: Create Release
         id: create_release
