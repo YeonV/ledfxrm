@@ -19,20 +19,22 @@
   - Binary Sensor (Is LedFX online?)
   - Devices Sensor (Number of Devices inside LedFX)
   - Scenes Sensor (Number of Scenes inside LedFX)
-  - Switch (if start/stop is set in config - `GET`-call)
+  - Pixels Sensor (Number of Pixels inside LedFX)
+  - Switch (if start/stop is set in config - custom `GET`-call)
   - Light 
     - EffectList (Filled with scenes from LedFX)
-    - On/Off mirrors Switch - upcoming feature
+    - Off->On - just toggles a manual sync (double click the switch)
 - EffectList-Change will fire LedFX via `PUT`
+- Scan_intervall in seconds via UI:
+  - Note: This also defines how long you can interact with it (start server), after a disconnect (kill server)
+  - Recommendation: set to a high number. Polling is only to get changes made inside ledFx.
 
 # Upcoming Features
 
 - More settings in Server Start/Stop Commands
 - Make also use of the after setup config flow (options)
   - Allow editing of setup-settings
-  - Make SCAN_INTERVAL editable via UI
   - Allow disable poll (If you have everything setup in ledfx, there is no need to poll for new infos all the time)
-  - Create a Sync-Button to manually trigger a request
   - Add more `POST` and `PUT` calls
 
 # Requirements:
