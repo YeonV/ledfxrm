@@ -3,7 +3,7 @@
 NAME = "LedFX ReMote"
 DOMAIN = "ledfxrm"
 DOMAIN_DATA = f"{DOMAIN}_data"
-VERSION = "0.1.3"
+VERSION = "0.1.4"
 MANUFACTURER = "YeonV"
 
 ISSUE_URL = "https://github.com/YeonV/ledfxrm/issues"
@@ -13,6 +13,7 @@ ICON_STRIP = "mdi:led-strip-variant"
 ICON_SCENE = "mdi:image-multiple-outline"
 ICON_ASCENE = "mdi:image-outline"
 ICON_POWER = "mdi:power"
+ICON_LED = "mdi:led-variant-outline"
 
 # Device classes
 BINARY_SENSOR_DEVICE_CLASS = "connectivity"
@@ -34,12 +35,14 @@ CONF_PORT = "port"
 CONF_START = "start"
 CONF_STOP = "stop"
 CONF_ADVANCED = "advanced"
+CONF_SCAN_INTERVAL = "scan_interval"
 
 # Defaults
 DEFAULT_NAME = DOMAIN
 
 NUMBER_SCENES = "Number of Scenes"
 NUMBER_DEVICES = "Number of Devices"
+NUMBER_PIXELS = "Number of Pixels"
 START_KILL_SERVER = "Start/Stop Server"
 
 

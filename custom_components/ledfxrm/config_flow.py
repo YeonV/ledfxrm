@@ -12,6 +12,11 @@ from custom_components.ledfxrm.const import (  # pylint: disable=unused-import
     CONF_PORT,
     CONF_START,
     CONF_STOP,
+    CONF_SCAN_INTERVAL,
+    BINARY_SENSOR,
+    SENSOR,
+    SWITCH,
+    LIGHT,
     DOMAIN,
     PLATFORMS,
 )
@@ -56,8 +61,9 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 {
                     vol.Required(CONF_HOST, default="192.168.1.56"): str,
                     vol.Required(CONF_PORT, default=8888): int,
-                    vol.Optional(CONF_START, default="192.168.1.56:1337/?ledfxstart"): str,
-                    vol.Optional(CONF_STOP, default="192.168.1.56:1337/?ledfxstop"): str
+                    vol.Optional(CONF_START, default="192.168.1.56:23002/?ledfxstart"): str,
+                    vol.Optional(CONF_STOP, default="192.168.1.56:23002/?ledfxstop"): str,
+                    vol.Optional(CONF_SCAN_INTERVAL, default=300): int
                 }
             ),
             errors=self._errors,
@@ -100,8 +106,11 @@ class LedfxrmOptionsFlowHandler(config_entries.OptionsFlow):
             step_id="user",
             data_schema=vol.Schema(
                 {
-                    vol.Required(x, default=self.options.get(x, True)): bool
-                    for x in sorted(PLATFORMS)
+                    vol.Optional(CONF_SCAN_INTERVAL, default=self.options.get(CONF_SCAN_INTERVAL, 300)): int,
+                    vol.Required(BINARY_SENSOR, default=self.options.get(BINARY_SENSOR, True)): bool,
+                    vol.Required(SENSOR, default=self.options.get(SENSOR, True)): bool,
+                    vol.Required(SWITCH, default=self.options.get(SWITCH, True)): bool,
+                    vol.Required(LIGHT, default=self.options.get(LIGHT, True)): bool
                 }
             ),
         )

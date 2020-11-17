@@ -16,10 +16,11 @@ from custom_components.ledfxrm.const import (
     DOMAIN,
     PLATFORMS,
     STARTUP_MESSAGE,
-    SWITCH
+    SWITCH,
+    CONF_SCAN_INTERVAL
 )
 
-SCAN_INTERVAL = timedelta(seconds=30)
+SCAN_INTERVAL = timedelta(seconds=300)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -43,10 +44,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     theversion = entry.data.get('version')
     thestart = entry.data.get('start')
     thestop = entry.data.get('stop')
-
+    #thescan = entry.data.get('scan_interval')
+    #logging.warning('scaaannn1: %s', thescan)
     coordinator = LedfxrmDataUpdateCoordinator(
+        #hass, thehost, theport, theversion, thestart, thestop, thescan
         hass, thehost, theport, theversion, thestart, thestop
     )
+    
     await coordinator.async_refresh()
     
     if not coordinator.last_update_success:
@@ -71,11 +75,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
 
 class myClient():
+    #def __init__(self, thehost, theport, thestart, thestop, thescan):
     def __init__(self, thehost, theport, thestart, thestop):
         self.thehost = thehost
         self.theport = theport
         self.thestart = thestart
         self.thestop = thestop
+        #self.thescan = thescan
+        #logging.warning('scaaannn2: %s', thescan)
         self.connected = False
         self.effect = 'off'
         
@@ -131,6 +138,7 @@ class myClient():
         
 class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
     """Class to manage fetching data from the API."""
+    #def __init__(self, hass: HomeAssistant, thehost, theport, theversion, thestart, thestop, thescan):
     def __init__(self, hass: HomeAssistant, thehost, theport, theversion, thestart, thestop):
         """Initialize."""
         self.theversion = theversion
@@ -138,18 +146,25 @@ class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
         self.theport = theport
         self.thestop = thestop
         self.thestart = thestart
+        #self.thescan = thescan
+        #logging.warning('scaaannn3: %s', thescan)
         self.api = myClient(thehost, theport, thestart, thestop)
+        #self.api = myClient(thehost, theport, thestart, thestop, thescan)
         self.platforms = []
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=SCAN_INTERVAL)
+        #super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=thescan)
 
     async def _async_update_data(self):
         """Update data via library."""
+        
         try:
+            #logging.warning('SCAN_INTERVAL_CHECK %s', thescan)
             data = await self.api.update()
             scenes = data.get('scenes').get('scenes')
             self.scenes = scenes
             
             self.number_scenes = len(scenes)
+            
             return data
         except Exception as exception:
             raise UpdateFailed(exception)

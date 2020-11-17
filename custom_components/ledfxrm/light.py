@@ -1,7 +1,7 @@
 """Light platform for ledfxrm."""
 from homeassistant.components.light import LightEntity, ATTR_EFFECT, SUPPORT_EFFECT, ATTR_EFFECT_LIST 
 
-from custom_components.ledfxrm.const import DEFAULT_NAME, DOMAIN, ICON_ASCENE, LIGHT, START_KILL_SERVER, NUMBER_SCENES, NUMBER_DEVICES
+from custom_components.ledfxrm.const import DEFAULT_NAME, DOMAIN, ICON_ASCENE, LIGHT, START_KILL_SERVER, NUMBER_SCENES, NUMBER_DEVICES, NUMBER_PIXELS
 from custom_components.ledfxrm.entity import LedfxrmEntity
 import logging
 from typing import Any, Dict, Optional
@@ -16,7 +16,7 @@ class LedfxrmBinaryLight(LedfxrmEntity, LightEntity):
     """ledfxrm light class."""
     
     async def async_turn_on(self, **kwargs):  # pylint: disable=unused-argument
-        """Turn on the switch."""
+        """Turn on the light."""
         if ATTR_EFFECT in kwargs:
             await self.coordinator.api.async_set_scene(kwargs['effect'])
             await self.coordinator.async_request_refresh()
@@ -27,7 +27,7 @@ class LedfxrmBinaryLight(LedfxrmEntity, LightEntity):
         
 
     async def async_turn_off(self, **kwargs):  # pylint: disable=unused-argument
-        """Turn off the switch."""
+        """Turn off the light."""
         #await self.coordinator.api.async_change_something(False)
         await self.coordinator.async_request_refresh()
     
@@ -74,13 +74,17 @@ class LedfxrmBinaryLight(LedfxrmEntity, LightEntity):
         """Return the state attributes of the entity."""
         scenenames = self.coordinator.data.get('scenes').get('scenes')
         devicenames = self.coordinator.data.get('devices').get('devices')
+        pixels = 0
+        for k in devicenames:
+            pixels = pixels + devicenames[k]['config'].get('pixel_count')
         return {
             NUMBER_SCENES: len(scenenames),
             NUMBER_DEVICES: len(devicenames),
+            NUMBER_PIXELS: pixels
         }
     @property
     def is_on(self):
-        """Return true if the switch is on."""
+        """Return true if the light is on."""
         return self.coordinator.api.connected
         
         
