@@ -58,14 +58,14 @@
 
 # Screens
 
-![integration](docs/integration.png)
+![integration](https://github.com/YeonV/ledfxrm/raw/main/docs/integration.png)
 
 <details><summary>show more</summary>
 <p>
 
-![main](docs/main.png)
+![main](https://github.com/YeonV/ledfxrm/raw/main/docs/main.png)
 
-![scenes](docs/scenes.png)
+![scenes](https://github.com/YeonV/ledfxrm/raw/main/docs/scenes.png)
 
 </p>
 </details>
