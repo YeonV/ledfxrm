@@ -18,7 +18,8 @@ jobs:
         run: |
           echo 'MESSAGES<<EOF' >> $GITHUB_ENV
           $(git log --pretty=format:"%s" $(git describe --tags --abbrev=0 @^)..@ )" >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV        
+          echo 'EOF' >> $GITHUB_ENV
+                  
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
