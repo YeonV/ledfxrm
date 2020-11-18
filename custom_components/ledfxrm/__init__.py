@@ -43,9 +43,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     thestart = entry.data.get('start')
     thestop = entry.data.get('stop')
     thescan = entry.data.get('scan_interval')
+    thesubdevices = entry.data.get('show_subdevices')
     
     coordinator = LedfxrmDataUpdateCoordinator(
-        hass, thehost, theport, theversion, thestart, thestop, thescan
+        hass, thehost, theport, theversion, thestart, thestop, thescan, thesubdevices
     )
     
     await coordinator.async_refresh()
@@ -160,7 +161,7 @@ class myClient():
         
 class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
     """Class to manage fetching data from the API."""
-    def __init__(self, hass: HomeAssistant, thehost, theport, theversion, thestart, thestop, thescan):
+    def __init__(self, hass: HomeAssistant, thehost, theport, theversion, thestart, thestop, thescan, thesubdevices):
     #def __init__(self, hass: HomeAssistant, thehost, theport, theversion, thestart, thestop):
         """Initialize."""
         self.theversion = theversion
@@ -169,6 +170,7 @@ class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
         self.thestop = thestop
         self.thestart = thestart
         self.thescan = thescan
+        self.thesubdevices = thesubdevices
         scan_interval = timedelta(seconds=self.thescan)
         self.api = myClient(thehost, theport, thestart, thestop)
         self.platforms = []

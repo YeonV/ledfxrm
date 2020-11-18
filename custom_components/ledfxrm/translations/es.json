@@ -12,7 +12,7 @@
                     "start": "GET Endpoint: Iniciar servidor",
                     "stop": "GET Endpoint: Kill Server",
                     "scan_interval": "Intervalo de exploración en segundos",
-                    "advanced": "Devmode"
+                    "advanced": "Devmode"                    
                 }
             }
         },

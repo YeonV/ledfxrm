@@ -10,7 +10,7 @@ async def async_setup_entry(hass, entry, async_add_devices):
     """Setup sensor platform."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
     devicenames = coordinator.data.get('devices').get('devices')
-    
+    logging.warning("AND HERE WE GO: %s", coordinator.thesubdevices)
     for k in devicenames:
         async_add_devices([LedfxrmChildLight(coordinator, entry, k, devicenames[k]['config'])])
         

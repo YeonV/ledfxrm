@@ -13,6 +13,7 @@ from custom_components.ledfxrm.const import (  # pylint: disable=unused-import
     CONF_START,
     CONF_STOP,
     CONF_SCAN_INTERVAL,
+    CONF_SHOW_SUBDEVICES,
     BINARY_SENSOR,
     SENSOR,
     SWITCH,
@@ -63,7 +64,8 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     vol.Required(CONF_PORT, default=8888): int,
                     vol.Optional(CONF_START, default="192.168.1.56:23002/?ledfxstart"): str,
                     vol.Optional(CONF_STOP, default="192.168.1.56:23002/?ledfxstop"): str,
-                    vol.Optional(CONF_SCAN_INTERVAL, default=300): int
+                    vol.Optional(CONF_SCAN_INTERVAL, default=300): int,         
+                    vol.Optional(CONF_SHOW_SUBDEVICES, default=False): bool
                 }
             ),
             errors=self._errors,

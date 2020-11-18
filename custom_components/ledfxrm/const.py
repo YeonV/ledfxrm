@@ -37,6 +37,8 @@ CONF_START = "start"
 CONF_STOP = "stop"
 CONF_ADVANCED = "advanced"
 CONF_SCAN_INTERVAL = "scan_interval"
+CONF_SHOW_SUBDEVICES = "show_subdevices"
+
 
 # Defaults
 DEFAULT_NAME = DOMAIN

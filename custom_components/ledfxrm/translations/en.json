@@ -12,7 +12,8 @@
                     "start": "GET Endpoint: Start Server",
                     "stop": "GET Endpoint: Kill Server",
                     "scan_interval": "Scan interval in seconds",
-                    "advanced": "Devmode"
+                    "advanced": "Devmode",
+                    "show_subdevices": "Create Entities for SubDevices?"
                 }
             }
         },
