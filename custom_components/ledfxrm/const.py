@@ -3,13 +3,14 @@
 NAME = "LedFX ReMote"
 DOMAIN = "ledfxrm"
 DOMAIN_DATA = f"{DOMAIN}_data"
-VERSION = "0.1.6"
+VERSION = "0.1.7"
 MANUFACTURER = "YeonV"
 
 ISSUE_URL = "https://github.com/YeonV/ledfxrm/issues"
 
 # Icons
 ICON_STRIP = "mdi:led-strip-variant"
+ICON_STRIP_DEVICE = "mdi:led-strip"
 ICON_SCENE = "mdi:image-multiple-outline"
 ICON_ASCENE = "mdi:image-outline"
 ICON_POWER = "mdi:power"

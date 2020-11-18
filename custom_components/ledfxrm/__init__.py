@@ -79,6 +79,8 @@ class myClient():
         self.thestop = thestop
         self.connected = False
         self.effect = 'off'
+        self.devicestates =  {}
+        
         
     async def update(self):
         url = "http://" + self.thehost + ":" + str(self.theport) + "/api/info"
@@ -88,6 +90,7 @@ class myClient():
         yz['rest_info'] = {}
         yz['rest_devices'] = {}
         yz['rest_scenes'] = {}
+        
         loop = asyncio.get_event_loop()
         async with aiohttp.ClientSession(loop=loop, trust_env = True) as session:
             async with session.get(url, ssl=False) as resp:                
@@ -97,13 +100,18 @@ class myClient():
             async with session.get(url2, ssl=False) as resp_devices:                
                 rest_devices = await resp_devices.json()                
                 yz['rest_devices'] = rest_devices
-        
+                
+                for k in rest_devices['devices']:
+                    self.devicestates[k] = False
+                
+                    
             async with session.get(url3, ssl=False) as resp_scenes:                
                 rest_scenes = await resp_scenes.json()                
                 yz['rest_scenes'] = rest_scenes                
     
         if len(rest_info) > 0:
             self.connected = True
+        
         return {'info':rest_info, 'devices': rest_devices, 'scenes': rest_scenes}
         
     async def async_change_something(self, state):
@@ -128,6 +136,26 @@ class myClient():
             async with session.put(url3, json={"id": effect, "action": "activate"}, ssl=False) as resp_scenes:                
                 res_set_scene = await resp_scenes.json()     
                 self.effect = effect
+        return None
+    
+    async def async_device_off(self, state):
+        logging.warning('DEVICE OFF %s', state)
+        url4 = "http://" + self.thehost + ":" + str(self.theport) + "/api/devices/" + state + "/effects"
+        loop = asyncio.get_event_loop()
+        async with aiohttp.ClientSession(loop=loop, trust_env = True) as session:
+            async with session.delete(url4, ssl=False) as del_effect:                
+                await del_effect.json()
+        self.devicestates[state] = False
+        return None
+        
+    async def async_device_on(self, state):
+        logging.warning('DEVICE ON %s', state)
+        url4 = "http://" + self.thehost + ":" + str(self.theport) + "/api/devices/" + state + "/effects"
+        loop = asyncio.get_event_loop()
+        async with aiohttp.ClientSession(loop=loop, trust_env = True) as session:
+            async with session.post(url4,json={"config":{"blur":4,"brightness":1,"color_cycler":False,"color_high":"blue","color_lows":"red","color_mids":"yellow","flip":False,"mirror":True,"mixing_mode":"overlap","sensitivity":0.85},"name":"Energy","type":"energy(Reactive)"}, ssl=False) as del_effect:                
+                await del_effect.json()     
+        self.devicestates[state] = True
         return None
         
 class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
