@@ -28,6 +28,7 @@
 - Scan_intervall in seconds via UI:
   - Note: This also defines how long you can interact with it (start server), after a disconnect (kill server)
   - Recommendation: set to a high number. Polling is only to get changes made inside ledFx.
+- Implementation of SubDevices started
 
 # Upcoming Features
 
@@ -36,6 +37,7 @@
   - Allow editing of setup-settings
   - Allow disable poll (If you have everything setup in ledfx, there is no need to poll for new infos all the time)
   - Add more `POST` and `PUT` calls
+  - SubDevices
 
 # Requirements:
 
