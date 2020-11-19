@@ -104,9 +104,20 @@ class myClient():
                 rest_devices = await resp_devices.json()                
                 yz['rest_devices'] = rest_devices
                 
-                for k in rest_devices['devices']:
-                    self.devicestates[k] = False
-                
+                if len(self.devicestates) == 0:
+                    for k in rest_devices['devices']:
+                        logging.warning("NOWWW: %s", k)
+                        logging.warning("THENN: %s", rest_devices['devices'][k])
+                        if len(rest_devices['devices'][k].get('effect', {})) > 0:
+                            effect = rest_devices['devices'][k].get('effect').get('config')
+                            power = True
+                        else:
+                            effect = {}
+                            power = False
+                        self.devicestates[k] = {
+                            "power": power,
+                            "effect": effect, #self.devicestates[k].get('effect', {})
+                        }
                     
             async with session.get(url3, ssl=False) as resp_scenes:                
                 rest_scenes = await resp_scenes.json()                
@@ -142,23 +153,44 @@ class myClient():
         return None
     
     async def async_device_off(self, state):
-        logging.warning('DEVICE OFF %s', state)
+        logging.warning('DEVICE OFF internal --- %s --- %s', state, self.devicestates[state].get('effect'))
         url4 = "http://" + self.thehost + ":" + str(self.theport) + "/api/devices/" + state + "/effects"
         loop = asyncio.get_event_loop()
+        
         async with aiohttp.ClientSession(loop=loop, trust_env = True) as session:
-            async with session.delete(url4, ssl=False) as del_effect:                
-                await del_effect.json()
-        self.devicestates[state] = False
+            async with session.get(url4, ssl=False) as get_effect:                
+                testing = await get_effect.json()
+                if testing['effect'] != {}:
+                    self.devicestates[state]['effect']=testing['effect']
+                    logging.warning("Turning Off, found effect: %s", self.devicestates[state].get('effect'))
+                    async with session.delete(url4, ssl=False) as del_effect:                
+                        await del_effect.json()
+                else:
+                    logging.warning("Turning Off, No effect:")
+                    
+        self.devicestates[state]['power'] = False
         return None
         
     async def async_device_on(self, state):
-        logging.warning('DEVICE ON %s', state)
+        logging.warning('DEVICE ON internal --- %s --- %s', state, self.devicestates[state].get('effect'))
         url4 = "http://" + self.thehost + ":" + str(self.theport) + "/api/devices/" + state + "/effects"
         loop = asyncio.get_event_loop()
+        payload = {}
         async with aiohttp.ClientSession(loop=loop, trust_env = True) as session:
-            async with session.post(url4,json={"config":{"blur":4,"brightness":1,"color_cycler":False,"color_high":"blue","color_lows":"red","color_mids":"yellow","flip":False,"mirror":True,"mixing_mode":"overlap","sensitivity":0.85},"name":"Energy","type":"energy(Reactive)"}, ssl=False) as del_effect:                
-                await del_effect.json()     
-        self.devicestates[state] = True
+            async with session.get(url4, ssl=False) as get_effect:                
+                testing = await get_effect.json()
+                if testing['effect'] != {}:
+                    logging.warning("Turning on, found effect: %s", testing['effect'])
+                    self.devicestates[state]['effect']=testing['effect']
+                if self.devicestates[state].get('effect') is None or self.devicestates[state].get('effect') == {}:
+                    logging.warning("INTERNAL EMPTY, %s", self.devicestates[state])
+                    payload = {'config': {'modulation_effect': 'sine', 'modulation_speed': 0.5, 'gradient_name': 'Spectral', 'gradient_repeat': 1, 'speed': 1.0, 'flip': False, 'brightness': 1.0, 'mirror': False, 'blur': 0.0, 'modulate': False, 'gradient_roll': 0}, 'name': 'Gradient', 'type': 'gradient'}
+                else:
+                    payload = self.devicestates[state].get('effect')
+                logging.warning("Setting Effect, %s", payload)
+                async with session.post(url4,json=payload, ssl=False) as set_effect:                
+                    await set_effect.json()     
+        self.devicestates[state]['power'] = True
         return None
         
 class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):

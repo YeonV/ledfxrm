@@ -129,16 +129,7 @@ class LedfxrmChildLight(LedfxrmBinaryLight):
         await self.coordinator.api.async_device_off(self.devicename)
         await self.coordinator.async_request_refresh()
     
-    #@property
-    #def device_info(self):
-    #    return {
-    #        "identifiers": {(DOMAIN, self.entity_id)},
-    #        "name": "In your face",
-    #        "model": self.coordinator.data.get("info").get("name") + ' ' + self.coordinator.data.get("info").get("version"),
-    #        "manufacturer": MANUFACTURER,
-    #        "sw_version": VERSION,
-    #    }
-        
+
     #@property
     #def supported_features(self) -> int:
     #    """Flag supported features."""
@@ -152,21 +143,14 @@ class LedfxrmChildLight(LedfxrmBinaryLight):
     @property
     def unique_id(self):
         """Return a unique ID to use for this entity."""
-        
-        #return self.config_entry.entry_id + '_light'
-        
-        #return DOMAIN + '_light_' + self.name
-        #return 'ledfxrm.ledfxrm.' + self.devicename
         return self.config_entry.entry_id + '.' + self.devicename 
     @property
     def name(self):
         """Return the name of the light."""
-        #logging.warning('33333 \n\n %s \n\n', self)
         return "⮑ " + self.devicename
     @property
     def friendly_name(self):
         """Return the name of the light."""
-        #logging.warning('33333 \n\n %s \n\n', self)
         return self.deviceconfig['name']
         
     @property
@@ -174,34 +158,30 @@ class LedfxrmChildLight(LedfxrmBinaryLight):
         """Return the icon of this light."""
         return ICON_STRIP_DEVICE
         
-    #@property
-    #def effect(self):
-    #    """Return the current effect."""
-    #    return self.coordinator.api.effect
+    @property
+    def effect(self):
+        """Return the current effect."""
+        return None
 
-    #@property
-    #def effect_list(self):
-    #    """Return the icon of this light."""
-    #    scenes = self.coordinator.data.get('scenes').get('scenes')
-    #    scenenames = []
-    #    for v in scenes.items():
-    #        for va in v:
-    #            if isinstance(va, str):
-    #                scenenames.append(va)
-    #    return scenenames
+    @property
+    def effect_list(self):
+        """Return the icon of this light."""
+        return None
         
     @property
     def device_state_attributes(self) -> Optional[Dict[str, Any]]:
         """Return the state attributes of the entity."""
+        logging.warning("OMMMMG: %s ", self.coordinator.api.devicestates)
         if self.deviceconfig == {}:
             return {'status': 'error'}
         return {
             'IP': self.deviceconfig['ip_address'],
             'Pixels': self.deviceconfig['pixel_count'],
-            'Refresh Rate': self.deviceconfig['refresh_rate']
+            'Refresh Rate': self.deviceconfig['refresh_rate'],
+            'Mode': self.coordinator.api.devicestates[self.devicename]['effect'].get('config', {}).get('name', 'OFF')
         }
         
     @property
     def is_on(self):
         """Return true if the light is on."""
-        return self.coordinator.api.devicestates[self.devicename]
+        return self.coordinator.api.devicestates[self.devicename]['power']
