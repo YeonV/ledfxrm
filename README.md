@@ -89,7 +89,7 @@ With Subdevices:
 
 ![main_adv](https://github.com/YeonV/ledfxrm/raw/main/docs/main_adv.png)
 
-![subdevices](https://github.com/YeonV/ledfxrm/raw/main/docs/subdevices.png)
+![subdevices](https://github.com/YeonV/ledfxrm/raw/main/docs/subdevice.png)
 
 </p>
 </details>
