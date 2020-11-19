@@ -15,6 +15,11 @@
 - ## LedFX Scene-Selector
 - ## LedFX Sub-Device Toggler
 
+|Default|with Subdevices||
+|---:|:---|:--|
+| ![tile](https://github.com/YeonV/ledfxrm/raw/main/docs/tile.png) | ![tile_adv](https://github.com/YeonV/ledfxrm/raw/main/docs/tile_adv.png) |
+
+
 # Requirements:
 
 - [LedFX](https://github.com/ahodges9/LedFx) > v0.7
@@ -67,11 +72,8 @@
 
 
 # Screens
-|Default|with Subdevices|
-|---:|:---|
-| ![tile](https://github.com/YeonV/ledfxrm/raw/main/docs/tile.png) | ![tile_adv](https://github.com/YeonV/ledfxrm/raw/main/docs/tile_adv.png) |
 
-<details><summary>show more</summary>
+<details><summary>show</summary>
 <p>
 Default:
 
