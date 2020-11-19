@@ -21,13 +21,13 @@ class LedfxrmEntity(CoordinatorEntity):
             "sw_version": VERSION,
         }
 
-    @property
-    def device_state_attributes(self):
-        """Return the state attributes."""
-        return {
-            "time": str(self.coordinator.data.get("time")),
-            "static": self.coordinator.data.get("version"),
-        }
+    #@property
+    #def device_state_attributes(self):
+    #    """Return the state attributes."""
+    #    return {
+    #        "time": str(self.coordinator.data.get("time")),
+    #        "static": self.coordinator.data.get("version"),
+    #    }
         
         
 #class LedfxrmEntityDyn(CoordinatorEntity):

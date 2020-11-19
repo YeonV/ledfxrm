@@ -17,7 +17,8 @@ from custom_components.ledfxrm.const import (
     PLATFORMS,
     STARTUP_MESSAGE,
     SWITCH,
-    CONF_SCAN_INTERVAL
+    CONF_SCAN_INTERVAL,
+    CONF_SHOW_SUBDEVICES
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -73,13 +74,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
 
 class myClient():
-    def __init__(self, thehost, theport, thestart, thestop):
+    def __init__(self, thehost, theport, thestart, thestop, thesubdevices):
         self.thehost = thehost
         self.theport = theport
         self.thestart = thestart
         self.thestop = thestop
         self.connected = False
         self.effect = 'off'
+        self.thesubdevices = thesubdevices
         self.devicestates =  {}
         
         
@@ -113,7 +115,7 @@ class myClient():
         if len(rest_info) > 0:
             self.connected = True
         
-        return {'info':rest_info, 'devices': rest_devices, 'scenes': rest_scenes}
+        return {'info':rest_info, 'devices': rest_devices, 'scenes': rest_scenes, 'show_subdevices': self.thesubdevices}
         
     async def async_change_something(self, state):
         loop = asyncio.get_event_loop()
@@ -172,7 +174,7 @@ class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
         self.thescan = thescan
         self.thesubdevices = thesubdevices
         scan_interval = timedelta(seconds=self.thescan)
-        self.api = myClient(thehost, theport, thestart, thestop)
+        self.api = myClient(thehost, theport, thestart, thestop, thesubdevices)
         self.platforms = []
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=scan_interval)
 

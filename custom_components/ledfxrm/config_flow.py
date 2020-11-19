@@ -42,7 +42,7 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             name, version = await self.get_rest_status(user_input[CONF_HOST], user_input[CONF_PORT])
             if name:
-                data_attr = {CONF_HOST: user_input[CONF_HOST], CONF_PORT: user_input[CONF_PORT], 'version': version, 'name': name, 'start': user_input[CONF_START], 'stop': user_input[CONF_STOP], 'scan_interval': user_input[CONF_SCAN_INTERVAL]}
+                data_attr = {CONF_HOST: user_input[CONF_HOST], CONF_PORT: user_input[CONF_PORT], 'version': version, 'name': name, 'start': user_input[CONF_START], 'stop': user_input[CONF_STOP], 'scan_interval': user_input[CONF_SCAN_INTERVAL], 'show_subdevices': user_input[CONF_SHOW_SUBDEVICES]}
                 return self.async_create_entry(title=name, data= data_attr)
             else:
                 self._errors["base"] = "auth"

@@ -1,7 +1,7 @@
 """Light platform for ledfxrm."""
 from homeassistant.components.light import LightEntity, ATTR_EFFECT, SUPPORT_EFFECT, ATTR_EFFECT_LIST 
 
-from custom_components.ledfxrm.const import DEFAULT_NAME, DOMAIN, ICON_ASCENE, LIGHT, START_KILL_SERVER, NUMBER_SCENES, NUMBER_DEVICES, NUMBER_PIXELS, ICON_STRIP_DEVICE
+from custom_components.ledfxrm.const import DEFAULT_NAME, DOMAIN, ICON_ASCENE, LIGHT, START_KILL_SERVER, NUMBER_SCENES, NUMBER_DEVICES, NUMBER_PIXELS, ICON_STRIP_DEVICE, CONF_SHOW_SUBDEVICES, MANUFACTURER, VERSION
 from custom_components.ledfxrm.entity import LedfxrmEntity #, LedfxrmEntityDyn
 import logging
 from typing import Any, Dict, Optional
@@ -10,9 +10,11 @@ async def async_setup_entry(hass, entry, async_add_devices):
     """Setup sensor platform."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
     devicenames = coordinator.data.get('devices').get('devices')
-    logging.warning("AND HERE WE GO: %s", coordinator.thesubdevices)
-    for k in devicenames:
-        async_add_devices([LedfxrmChildLight(coordinator, entry, k, devicenames[k]['config'])])
+    test = coordinator.data.get(CONF_SHOW_SUBDEVICES)
+    #logging.warning("AND HERE WE GO: %s ----- %s", test, devicenames)
+    if test is True:
+        for k in devicenames:
+            async_add_devices([LedfxrmChildLight(coordinator, entry, k, devicenames[k]['config'])])
         
     async_add_devices([
         LedfxrmBinaryLight(coordinator, entry)
@@ -124,7 +126,15 @@ class LedfxrmChildLight(LedfxrmEntity, LightEntity):
         await self.coordinator.api.async_device_off(self.devicename)
         await self.coordinator.async_request_refresh()
     
-
+    @property
+    def device_info(self):
+        return {
+            "identifiers": {(DOMAIN, self.entity_id)},
+            "name": "In your face",
+            "model": self.coordinator.data.get("info").get("name") + ' ' + self.coordinator.data.get("info").get("version"),
+            "manufacturer": MANUFACTURER,
+            "sw_version": VERSION,
+        }
         
     #@property
     #def supported_features(self) -> int:
@@ -149,7 +159,7 @@ class LedfxrmChildLight(LedfxrmEntity, LightEntity):
     def name(self):
         """Return the name of the light."""
         #logging.warning('33333 \n\n %s \n\n', self)
-        return self.devicename
+        return "LedFX Subdevices"
     @property
     def friendly_name(self):
         """Return the name of the light."""
