@@ -10,37 +10,14 @@
 ### [Custom Integration](https://github.com/hacs/integration) for [Home Assistant](https://github.com/home-assistant) to control a any (local/remote) [LedFX-server](https://github.com/ahodges9/LedFx)
 ---
 
-# Features
+# Main Features
 
-- Everything configurable via UI
-- AutoConnect to 3 LedFX-Rest-API-Endpoints
-- Automatically `GET` Informations from all Endpoints
-- AutoCreate Entities:
-  - Binary Sensor (Is LedFX online?)
-  - Devices Sensor (Number of Devices inside LedFX)
-  - Scenes Sensor (Number of Scenes inside LedFX)
-  - Pixels Sensor (Number of Pixels inside LedFX)
-  - Switch (if start/stop is set in config - custom `GET`-call)
-  - Light 
-    - EffectList (Filled with scenes from LedFX)
-    - Off->On - just toggles a manual sync (double click the switch)
-- EffectList-Change will fire LedFX via `PUT`
-- Scan_intervall in seconds via UI:
-  - Note: This also defines how long you can interact with it (start server), after a disconnect (kill server)
-  - Recommendation: set to a high number. Polling is only to get changes made inside ledFx.
-- SubDevices (config via UI)
-
-# Upcoming Features
-
-- More settings in Server Start/Stop Commands
-- Make also use of the after setup config flow (options)
-  - Allow editing of setup-settings
-  - Allow disable poll (If you have everything setup in ledfx, there is no need to poll for new infos all the time)
-  - Add more `POST` and `PUT` calls
+- ## LedFX Scene-Selector
+- ## LedFX Sub-Device Toggler
 
 # Requirements:
 
-- [LedFX](https://github.com/ahodges9/LedFx) 
+- [LedFX](https://github.com/ahodges9/LedFx) > v0.7
   - with at least one scene setup
   - the ledfx config yaml defines your host to 127.0.0.1 per default. You need to change it to  0.0.0.0
 - [hass](https://github.com/home-assistant) - (HomeAssistant)
@@ -57,16 +34,62 @@
 
 # [Step by Step - Images-Guide](https://github.com/YeonV/ledfxrm/wiki/Step-by-Step-Images)
 
-# Screens
 
-![integration](https://github.com/YeonV/ledfxrm/raw/main/docs/integration.png)
+# Detailed Features
+
+- Everything configurable via UI :)
+- AutoCreate Entities with `GET` Informations from all LedFX-API-Endpoints:
+  - Binary Sensor (Is LedFX online?)
+  - Devices Sensor (Number of Devices inside LedFX)
+  - Scenes Sensor (Number of Scenes inside LedFX)
+  - Pixels Sensor (Number of Pixels inside LedFX)
+  - Switch (if start/stop is set in config - custom `GET`-call)
+  - Light 
+    - EffectList (Filled with scenes from LedFX)
+    - Off->On - just toggles a manual sync (double click the switch)
+- EffectList-Change will fire LedFX via `PUT`
+- Scan_intervall in seconds via UI:
+  - Note: This also defines how long you can interact with it (start server), after a disconnect (kill server)
+  - Recommendation: set to a high number. Polling is only to get changes made inside ledFx.
+- SubDevices: (config via UI)
+  - Get the Devices running inside LedFX including their states
+  - ON / OFF Button
+    - OFF Button saves the current effect running on the current device
+    - ON Button will use that state if available otherwise sends "Gradient"
+
+# Upcoming Features
+
+- More settings in Server Start/Stop Commands
+- Make also use of the after setup config flow (options)
+  - Allow editing of setup-settings
+  - Allow disable poll (If you have everything setup in ledfx, there is no need to poll for new infos all the time)
+  - Make fallback "gradient" somehow editable for the user
+
+
+# Screens
+|Default|with Subdevices|
+|---:|:---|
+| ![tile](https://github.com/YeonV/ledfxrm/raw/main/docs/tile.png) | ![tile_adv](https://github.com/YeonV/ledfxrm/raw/main/docs/tile_adv.png) |
 
 <details><summary>show more</summary>
 <p>
+Default:
+
+![setup](https://github.com/YeonV/ledfxrm/raw/main/docs/setup.png) 
 
 ![main](https://github.com/YeonV/ledfxrm/raw/main/docs/main.png)
 
-![scenes](https://github.com/YeonV/ledfxrm/raw/main/docs/scenes.png)
+![scene_selector_1](https://github.com/YeonV/ledfxrm/raw/main/docs/scene_selector_1.png)
+
+![scene_selector_2](https://github.com/YeonV/ledfxrm/raw/main/docs/scene_selector_2.png)
+
+With Subdevices:
+
+![setup_adv](https://github.com/YeonV/ledfxrm/raw/main/docs/setup_adv.png)
+
+![main_adv](https://github.com/YeonV/ledfxrm/raw/main/docs/main_adv.png)
+
+![subdevices](https://github.com/YeonV/ledfxrm/raw/main/docs/subdevices.png)
 
 </p>
 </details>
@@ -74,11 +97,9 @@
 
 # Credits
 
-[![ledfx-github](https://img.shields.io/badge/Github-LedFX-blue.svg?logo=github&logoColor=white)](https://github.com/ahodges9/LedFx/tree/dev/ledfx)
-[![ledfx-discord](https://img.shields.io/badge/Discord-LedFX-blue.svg?logo=discord&logoColor=white)](https://discord.gg/wJ755dY)
+[![ledfx-github](https://img.shields.io/badge/Github-LedFX-blue.svg?logo=github&logoColor=white)](https://github.com/ahodges9/LedFx/tree/dev/ledfx) [![ledfx-discord](https://img.shields.io/badge/Discord-LedFX-blue.svg?logo=discord&logoColor=white)](https://discord.gg/wJ755dY)
 
-[![wled-github](https://img.shields.io/badge/Github-WLED-blue.svg?logo=github&logoColor=white)](https://github.com/Aircoookie/WLED)
-[![wled-discord](https://img.shields.io/badge/Discord-WLED-blue.svg?logo=discord&logoColor=white)](https://discord.gg/KuqP7NE)
+[![wled-github](https://img.shields.io/badge/Github-WLED-blue.svg?logo=github&logoColor=white)](https://github.com/Aircoookie/WLED) [![wled-discord](https://img.shields.io/badge/Discord-WLED-blue.svg?logo=discord&logoColor=white)](https://discord.gg/KuqP7NE)
 
 [![blueprint-github](https://img.shields.io/badge/Github-HomeAssistant-blue.svg?logo=github&logoColor=white)](https://github.com/home-assistant)
 
