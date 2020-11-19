@@ -171,14 +171,14 @@ class LedfxrmChildLight(LedfxrmBinaryLight):
     @property
     def device_state_attributes(self) -> Optional[Dict[str, Any]]:
         """Return the state attributes of the entity."""
-        logging.warning("OMMMMG: %s ", self.coordinator.api.devicestates)
+        #logging.warning("OMMMMG: %s ", self.coordinator.api.devicestates)
         if self.deviceconfig == {}:
             return {'status': 'error'}
         return {
             'IP': self.deviceconfig['ip_address'],
             'Pixels': self.deviceconfig['pixel_count'],
             'Refresh Rate': self.deviceconfig['refresh_rate'],
-            'Mode': self.coordinator.api.devicestates[self.devicename]['effect'].get('config', {}).get('name', 'OFF')
+            'Mode': self.coordinator.api.devicestates[self.devicename]['effect'].get('name', 'OFF')
         }
         
     @property
