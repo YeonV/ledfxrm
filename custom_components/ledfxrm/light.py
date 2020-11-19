@@ -100,12 +100,15 @@ class LedfxrmBinaryLight(LedfxrmEntity, LightEntity):
 
 
 
-class LedfxrmChildLight(LedfxrmEntity, LightEntity):
+class LedfxrmChildLight(LedfxrmBinaryLight):
     """ledfxrm light class."""
-    def __init__(self,LedfxrmEntity, LightEntity, devicename='NoName', deviceconfig={'NoConfig': 'NoConfig'}):
+    def __init__(self, coordinator, config_entry, devicename='NoName', deviceconfig={'NoConfig': 'NoConfig'}):
+        super().__init__(coordinator, config_entry)
+        self.config_entry = config_entry
+        self.entity_id = "ledfxrm.ledfxrm"
         self.devicename = devicename
-        self.coordinator = LedfxrmEntity
-        self.config_entry = LightEntity
+        #self.coordinator = coordinator
+        #self.config_entry = LightEntity
         self.deviceconfig = deviceconfig
         #logging.warning("WTTTTFFFFFFF \nCOOOOO: %s", coordinator)
         #logging.warning("WTTTTFFFFFFF \nName: %s\nConfig: %s", devicename, deviceconfig)
@@ -126,15 +129,15 @@ class LedfxrmChildLight(LedfxrmEntity, LightEntity):
         await self.coordinator.api.async_device_off(self.devicename)
         await self.coordinator.async_request_refresh()
     
-    @property
-    def device_info(self):
-        return {
-            "identifiers": {(DOMAIN, self.entity_id)},
-            "name": "In your face",
-            "model": self.coordinator.data.get("info").get("name") + ' ' + self.coordinator.data.get("info").get("version"),
-            "manufacturer": MANUFACTURER,
-            "sw_version": VERSION,
-        }
+    #@property
+    #def device_info(self):
+    #    return {
+    #        "identifiers": {(DOMAIN, self.entity_id)},
+    #        "name": "In your face",
+    #        "model": self.coordinator.data.get("info").get("name") + ' ' + self.coordinator.data.get("info").get("version"),
+    #        "manufacturer": MANUFACTURER,
+    #        "sw_version": VERSION,
+    #    }
         
     #@property
     #def supported_features(self) -> int:
@@ -159,7 +162,7 @@ class LedfxrmChildLight(LedfxrmEntity, LightEntity):
     def name(self):
         """Return the name of the light."""
         #logging.warning('33333 \n\n %s \n\n', self)
-        return "LedFX Subdevices"
+        return "⮑ " + self.devicename
     @property
     def friendly_name(self):
         """Return the name of the light."""
