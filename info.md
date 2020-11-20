@@ -24,7 +24,7 @@
 - Toggle the power for devices configured in LedFx
 
 | Default | With Devices |
-|:-------:|:---------------:|
+|:-------:|:------------:|
 | ![tile](https://github.com/YeonV/ledfxrm/raw/main/docs/tile.png) | ![tile_adv](https://github.com/YeonV/ledfxrm/raw/main/docs/tile_adv.png) |
 
 ## Requirements:
