@@ -14,6 +14,7 @@ from custom_components.ledfxrm.const import (  # pylint: disable=unused-import
     CONF_STOP,
     CONF_SCAN_INTERVAL,
     CONF_SHOW_SUBDEVICES,
+    CONF_ADVANCED,
     BINARY_SENSOR,
     SENSOR,
     SWITCH,
@@ -31,11 +32,11 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     def __init__(self):
         """Initialize."""
         self._errors = {}
-        
+
     async def async_step_user( self, user_input=None ):
         """Handle a flow initialized by the user."""
         self._errors = {}
-    
+
         if self._async_current_entries():
             return self.async_abort(reason="single_instance_allowed")
 
@@ -62,22 +63,23 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 {
                     vol.Required(CONF_HOST, default="192.168.1.56"): str,
                     vol.Required(CONF_PORT, default=8888): int,
+                    vol.Optional(CONF_ADVANCED, default=False): bool,
                     vol.Optional(CONF_START, default="192.168.1.56:23002/?ledfxstart"): str,
                     vol.Optional(CONF_STOP, default="192.168.1.56:23002/?ledfxstop"): str,
-                    vol.Optional(CONF_SCAN_INTERVAL, default=300): int,         
+                    vol.Optional(CONF_SCAN_INTERVAL, default=300): int,
                     vol.Optional(CONF_SHOW_SUBDEVICES, default=False): bool
                 }
             ),
             errors=self._errors,
         )
-    
-            
+
+
     async def get_rest_status(self, thehost, theport):
         """Return true if credentials is valid."""
         loop = asyncio.get_event_loop()
         url = "http://" + thehost + ":" + str(theport) + "/api/info"
         async with aiohttp.ClientSession(loop=loop, trust_env = True) as session:
-            async with session.get(url, ssl=False) as resp:                
+            async with session.get(url, ssl=False) as resp:
                 rest_info = await resp.json()
                 name = rest_info['name']
                 version = rest_info['version']
