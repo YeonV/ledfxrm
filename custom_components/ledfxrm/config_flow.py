@@ -38,7 +38,7 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         """Initialize."""
         self._errors = {}
 
-    async def async_step_user(self, user_input=None, user_input_2=None):
+    async def async_step_user(self, user_input=None):
         """Handle a flow initialized by the user."""
         self._errors = {}
 
@@ -46,31 +46,47 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             return self.async_abort(reason="single_instance_allowed")
 
         if user_input is not None:
-            # if CONF_ADVANCED in user_input:
-            #     if user_input[CONF_ADVANCED] is True and user_input_2 is None:
-            #         return await self._show_config_form_2(user_input_2)
-            name, version = await self.get_rest_status(
-                user_input[CONF_HOST], user_input[CONF_PORT]
-            )
-            if name:
-                data_attr = {
-                    CONF_HOST: user_input[CONF_HOST],
-                    CONF_PORT: user_input[CONF_PORT],
-                    "version": version,
-                    "name": name,
-                    CONF_START: user_input[CONF_START],
-                    CONF_START_METHOD: user_input[CONF_START_METHOD],
-                    CONF_STOP_METHOD: user_input[CONF_STOP_METHOD],
-                    CONF_START_BODY: user_input[CONF_START_BODY],
-                    CONF_STOP_BODY: user_input[CONF_STOP_BODY],
-                    CONF_STOP: user_input[CONF_STOP],
-                    CONF_SCAN_INTERVAL: user_input[CONF_SCAN_INTERVAL],
-                    CONF_SHOW_SUBDEVICES: user_input[CONF_SHOW_SUBDEVICES],
-                }
+            if CONF_HOST in user_input:
+                name, version = await self.get_rest_status(
+                    user_input[CONF_HOST], user_input[CONF_PORT]
+                )
+                if hasattr(self, "data_attr"):
+                    self.data_attr[CONF_HOST] = user_input[CONF_HOST]
+                    self.data_attr[CONF_PORT] = user_input[CONF_PORT]
+                    self.data_attr["name"] = name
+                    self.data_attr["version"] = version
+                    self.data_attr[CONF_SCAN_INTERVAL] = user_input[CONF_SCAN_INTERVAL]
+                    self.data_attr[CONF_SHOW_SUBDEVICES] = user_input[
+                        CONF_SHOW_SUBDEVICES
+                    ]
+                else:
+                    self.data_attr = {
+                        CONF_HOST: user_input[CONF_HOST],
+                        CONF_PORT: user_input[CONF_PORT],
+                        "version": version,
+                        "name": name,
+                        CONF_SCAN_INTERVAL: user_input[CONF_SCAN_INTERVAL],
+                        CONF_SHOW_SUBDEVICES: user_input[CONF_SHOW_SUBDEVICES],
+                    }
 
-                return self.async_create_entry(title=name, data=data_attr)
-            else:
-                self._errors["base"] = "auth"
+                if user_input[CONF_ADVANCED] is True:
+                    return await self._show_config_form_2(user_input)
+                return self.async_create_entry(
+                    title=self.data_attr["name"], data=self.data_attr
+                )
+            if CONF_START in user_input:
+                if hasattr(self, "data_attr"):
+                    self.data_attr[CONF_START] = user_input[CONF_START]
+                    self.data_attr[CONF_START_METHOD] = user_input[CONF_START_METHOD]
+                    self.data_attr[CONF_STOP_METHOD] = user_input[CONF_STOP_METHOD]
+                    self.data_attr[CONF_START_BODY] = user_input[CONF_START_BODY]
+                    self.data_attr[CONF_STOP_BODY] = user_input[CONF_STOP_BODY]
+                    self.data_attr[CONF_STOP] = user_input[CONF_STOP]
+            if hasattr(self, "data_attr"):
+                # logging.warning("DATA: %s", self.data_attr)
+                return self.async_create_entry(
+                    title=self.data_attr["name"], data=self.data_attr
+                )
             return await self._show_config_form(user_input)
         return await self._show_config_form(user_input)
 
@@ -89,7 +105,22 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 {
                     vol.Required(CONF_HOST, default="192.168.1.56"): str,
                     vol.Required(CONF_PORT, default=8888): int,
+                    vol.Optional(CONF_SCAN_INTERVAL, default=300): int,
+                    vol.Optional(CONF_SHOW_SUBDEVICES, default=False): bool,
                     vol.Optional(CONF_ADVANCED, default=False): bool,
+                }
+            ),
+            errors=self._errors,
+        )
+
+    async def _show_config_form_2(
+        self, user_input=None
+    ):  # pylint: disable=unused-argument
+        """Show the configuration form to edit location data."""
+        return self.async_show_form(
+            step_id="user",
+            data_schema=vol.Schema(
+                {
                     vol.Optional(CONF_START_METHOD, default="GET"): vol.In(
                         ["GET", "PUT", "POST", "DELETE"]
                     ),
@@ -107,33 +138,10 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     vol.Optional(
                         CONF_STOP, default="192.168.1.56:23002/?ledfxstop"
                     ): str,
-                    vol.Optional(CONF_SCAN_INTERVAL, default=300): int,
-                    vol.Optional(CONF_SHOW_SUBDEVICES, default=False): bool,
                 }
             ),
             errors=self._errors,
         )
-
-    # async def _show_config_form_2(
-    #     self, user_input_2=None
-    # ):  # pylint: disable=unused-argument
-    #     """Show the configuration form to edit location data."""
-    #     return self.async_show_form(
-    #         step_id="user",
-    #         data_schema=vol.Schema(
-    #             {
-    #                 vol.Optional(
-    #                     CONF_START, default="192.168.1.56:23002/?ledfxstart"
-    #                 ): str,
-    #                 vol.Optional(
-    #                     CONF_STOP, default="192.168.1.56:23002/?ledfxstop"
-    #                 ): str,
-    #                 vol.Optional(CONF_SCAN_INTERVAL, default=300): int,
-    #                 vol.Optional(CONF_SHOW_SUBDEVICES, default=False): bool,
-    #             }
-    #         ),
-    #         errors=self._errors,
-    #     )
 
     async def get_rest_status(self, thehost, theport):
         """Return true if credentials is valid."""
@@ -147,11 +155,6 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 # logging.warning('Config for %s | Version: %s', name, version)
         # return yz
         return name, version
-
-    async def handle_adv(self, state):
-        """Return true if credentials is valid."""
-        logging.deug("Handle ADV: %s", state)
-        return
 
 
 class LedfxrmOptionsFlowHandler(config_entries.OptionsFlow):
