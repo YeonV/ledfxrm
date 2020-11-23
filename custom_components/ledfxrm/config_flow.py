@@ -16,8 +16,6 @@ from custom_components.ledfxrm.const import (  # pylint: disable=unused-import
     CONF_SHOW_SUBDEVICES,
     CONF_START_METHOD,
     CONF_STOP_METHOD,
-    CONF_START_METHOD,
-    CONF_STOP_METHOD,
     CONF_START_BODY,
     CONF_STOP_BODY,
     CONF_ADVANCED,

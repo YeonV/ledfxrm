@@ -17,8 +17,16 @@ from custom_components.ledfxrm.const import (
     PLATFORMS,
     STARTUP_MESSAGE,
     SWITCH,
+    CONF_HOST,
+    CONF_PORT,
+    CONF_START,
+    CONF_STOP,
     CONF_SCAN_INTERVAL,
     CONF_SHOW_SUBDEVICES,
+    CONF_START_METHOD,
+    CONF_STOP_METHOD,
+    CONF_START_BODY,
+    CONF_STOP_BODY,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -39,17 +47,17 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         hass.data.setdefault(DOMAIN, {})
         _LOGGER.info(STARTUP_MESSAGE)
 
-    thehost = entry.data.get("host")
-    theport = entry.data.get("port")
+    thehost = entry.data.get(CONF_HOST)
+    theport = entry.data.get(CONF_PORT)
     theversion = entry.data.get("version")
-    thestart = entry.data.get("start")
-    thestop = entry.data.get("stop")
-    thescan = entry.data.get("scan_interval")
-    thesubdevices = entry.data.get("show_subdevices")
-    thestart_method = entry.data.get("start_method")
-    thestart_body = entry.data.get("start_body")
-    thestop_method = entry.data.get("stop_method")
-    thestop_body = entry.data.get("stop_body")
+    thestart = entry.data.get(CONF_START)
+    thestop = entry.data.get(CONF_STOP)
+    thescan = entry.data.get(CONF_SCAN_INTERVAL)
+    thesubdevices = entry.data.get(CONF_SHOW_SUBDEVICES)
+    thestart_method = entry.data.get(CONF_START_METHOD)
+    thestart_body = entry.data.get(CONF_START_BODY)
+    thestop_method = entry.data.get(CONF_STOP_METHOD)
+    thestop_body = entry.data.get(CONF_STOP_BODY)
     coordinator = LedfxrmDataUpdateCoordinator(
         hass,
         thehost,
