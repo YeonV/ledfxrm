@@ -89,10 +89,15 @@
   - ON / OFF Button
     - OFF Button saves the current effect running on the current device
     - ON Button will use that state if available otherwise sends "Gradient"
+- Start/Stop Server:
+  - Set custom Endpoints for Start and Stop
+  - Configurable methods: `GET`, `DELETE`, `PUT`, `POST`
+  - Configurable body: json (untested)
+
 
 ## Upcoming Features
 
-- More settings in Server Start/Stop Commands
+
 - Make also use of the after setup config flow (options)
   - Allow editing of setup-settings
   - Allow disable poll (If you have everything setup in ledfx, there is no need to poll for new infos all the time)
