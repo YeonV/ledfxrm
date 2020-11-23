@@ -38,6 +38,10 @@ CONF_STOP = "stop"
 CONF_ADVANCED = "advanced"
 CONF_SCAN_INTERVAL = "scan_interval"
 CONF_SHOW_SUBDEVICES = "show_subdevices"
+CONF_START_METHOD = "start_method"
+CONF_STOP_METHOD = "stop_method"
+CONF_START_BODY = "start_body"
+CONF_STOP_BODY = "stop_body"
 
 
 # Defaults

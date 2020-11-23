@@ -9,10 +9,24 @@
                     "theport": "8888",
                     "host": "Host",
                     "port": "Port",
+                    "start": "Start-Endpoint",
+                    "start_method": "Method for Start-Endpoint",
+                    "start_body": "JSON-Body for Start-Endpoint",
+                    "stop": "Stop-Endpoint",
+                    "stop_method": "Method for Stop-Endpoint",
+                    "end_body": "JSON-Body for End-Endpoint",
+                    "scan_interval": "Scan interval in seconds",
+                    "advanced": "Devmode",
+                    "show_subdevices": "Create Entities for SubDevices?"
+                }
+            },
+            "user_2": {
+                "title": "LedFX Remote - Advanced Setup",
+                "description": "https://github.com/YeonV/ledfxrm",
+                "data": {
                     "start": "GET Endpoint: Start Server",
                     "stop": "GET Endpoint: Kill Server",
                     "scan_interval": "Scan interval in seconds",
-                    "advanced": "Devmode",
                     "show_subdevices": "Create Entities for SubDevices?"
                 }
             }
