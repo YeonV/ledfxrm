@@ -3,12 +3,17 @@ import aiohttp
 from datetime import timedelta
 import logging
 import json
+import socket
+
+_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+from time import sleep
 
 import homeassistant.loader as loader
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import Config, HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.util.color import color_hs_to_RGB
 from homeassistant import bootstrap
 
 
@@ -30,6 +35,36 @@ from custom_components.ledfxrm.const import (
 )
 
 _LOGGER = logging.getLogger(__name__)
+
+
+def hex_to_rgb(hex_in):
+    hex_in = hex_in.lstrip("#")
+    hlen = len(hex_in)
+    return tuple(int(hex_in[i : i + hlen // 3], 16) for i in range(0, hlen, hlen // 3))
+
+
+def hsl_to_rgb(h, s, l):
+    def hue_to_rgb(p, q, t):
+        t += 1 if t < 0 else 0
+        t -= 1 if t > 1 else 0
+        if t < 1 / 6:
+            return p + (q - p) * 6 * t
+        if t < 1 / 2:
+            return q
+        if t < 2 / 3:
+            p + (q - p) * (2 / 3 - t) * 6
+        return p
+
+    if s == 0:
+        r, g, b = l, l, l
+    else:
+        q = l * (1 + s) if l < 0.5 else l + s - l * s
+        p = 2 * l - q
+        r = hue_to_rgb(p, q, h + 1 / 3)
+        g = hue_to_rgb(p, q, h)
+        b = hue_to_rgb(p, q, h - 1 / 3)
+
+    return r, g, b
 
 
 async def async_setup(hass: HomeAssistant, config: Config):
@@ -116,6 +151,7 @@ class myClient:
         self.effect = "off"
         self.thesubdevices = thesubdevices
         self.devicestates = {}
+        self.devices = {}
         self.thestart_method = thestart_method
         self.thestart_body = thestart_body
         self.thestop_method = thestop_method
@@ -139,6 +175,7 @@ class myClient:
             async with session.get(url2, ssl=False) as resp_devices:
                 rest_devices = await resp_devices.json()
                 yz["rest_devices"] = rest_devices
+                self.devices = yz["rest_devices"]
                 # logging.warning("INTERNAL STATES b4: %s", self.devicestates)
                 if len(self.devicestates) == 0:
                     for k in rest_devices["devices"]:
@@ -320,6 +357,79 @@ class myClient:
         self.devicestates[state]["power"] = True
         return None
 
+    async def async_blade_off(self):
+        for key in self.devices.get("devices"):
+            logging.warning(
+                "BLADE OFF internal --- %s --- %s --- %s",
+                self.devices.get("devices").get(key).get("config").get("name"),
+                self.devices.get("devices").get(key).get("config").get("ip_address"),
+                self.devices.get("devices").get(key).get("config").get("pixel_count"),
+            )
+            msg = "#000000"
+            rgb_tuple = hex_to_rgb(msg)
+            rgbtest = list(rgb_tuple)
+            for i in range(
+                self.devices.get("devices").get(key).get("config").get("pixel_count")
+            ):
+
+                m = []
+                m.append(1)
+                m.append(255)
+                m.append(i)
+                m.extend(rgbtest)
+                m = bytes(m)
+                _sock.sendto(
+                    m,
+                    (
+                        self.devices.get("devices")
+                        .get(key)
+                        .get("config")
+                        .get("ip_address"),
+                        21324,
+                    ),
+                )
+                sleep(0.02)
+        return None
+
+    async def async_blade_on(self, state):
+        # logging.warning("CHECK THIS: %s", state.get("hs_color")[0])
+        testcolor = color_hs_to_RGB(state.get("hs_color")[0], state.get("hs_color")[1])
+        logging.warning(
+            "CHECK THIS: %s -------- %s", testcolor, type(self.devices.get("devices"))
+        )
+        for key in self.devices.get("devices"):
+            # logging.warning(
+            #     "BLADE ON internal --- %s --- %s --- %s",
+            #     self.devices.get("devices").get(key).get("config").get("name"),
+            #     self.devices.get("devices").get(key).get("config").get("ip_address"),
+            #     self.devices.get("devices").get(key).get("config").get("pixel_count"),
+            # )
+            msg = "#ff0000"
+            rgb_tuple = hex_to_rgb(msg)
+            rgbtest = list(rgb_tuple)
+            for i in range(
+                self.devices.get("devices").get(key).get("config").get("pixel_count")
+            ):
+
+                m = []
+                m.append(1)
+                m.append(255)
+                m.append(i)
+                m.extend(testcolor)
+                m = bytes(m)
+                _sock.sendto(
+                    m,
+                    (
+                        self.devices.get("devices")
+                        .get(key)
+                        .get("config")
+                        .get("ip_address"),
+                        21324,
+                    ),
+                )
+                sleep(0.02)
+        return None
+
 
 class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
     """Class to manage fetching data from the API."""
@@ -374,7 +484,9 @@ class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
             # logging.warning('SCAN_INTERVAL_CHECK %s', self.thescan)
             data = await self.api.update()
             scenes = data.get("scenes").get("scenes")
+            devices = data.get("devices").get("devices")
             self.scenes = scenes
+            self.devices = devices
 
             self.number_scenes = len(scenes)
 
