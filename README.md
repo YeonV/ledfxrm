@@ -93,7 +93,7 @@
   - Set custom Endpoints for Start and Stop
   - Configurable methods: `GET`, `DELETE`, `PUT`, `POST`
   - Configurable body: json (untested)
-
+- NEW: Add Blade-Light: 1 effect throught multiple devices
 
 ## Upcoming Features
 
@@ -109,9 +109,9 @@
 <summary>show</summary>
 <p>
 Default:
-  
+
 ![ledfx-remote](https://user-images.githubusercontent.com/28861537/100016798-46dde600-2dda-11eb-90c5-8229024a2e39.png)
-  
+
 ![setup](https://github.com/YeonV/ledfxrm/raw/main/docs/setup.png)
 
 ![main](https://github.com/YeonV/ledfxrm/raw/main/docs/main.png)
