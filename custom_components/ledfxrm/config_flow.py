@@ -14,6 +14,7 @@ from custom_components.ledfxrm.const import (  # pylint: disable=unused-import
     CONF_STOP,
     CONF_SCAN_INTERVAL,
     CONF_SHOW_SUBDEVICES,
+    CONF_SHOW_BLADELIGHT,
     CONF_START_METHOD,
     CONF_STOP_METHOD,
     CONF_START_BODY,
@@ -51,6 +52,11 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     user_input[CONF_HOST], user_input[CONF_PORT]
                 )
                 if hasattr(self, "data_attr"):
+                    logging.warning(
+                        "WHYYYY 111 %s ----- %s ",
+                        user_input[CONF_SHOW_SUBDEVICES],
+                        user_input[CONF_SHOW_BLADELIGHT],
+                    )
                     self.data_attr[CONF_HOST] = user_input[CONF_HOST]
                     self.data_attr[CONF_PORT] = user_input[CONF_PORT]
                     self.data_attr["name"] = name
@@ -59,15 +65,22 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     self.data_attr[CONF_SHOW_SUBDEVICES] = user_input[
                         CONF_SHOW_SUBDEVICES
                     ]
+                    self.data_attr[CONF_SHOW_BLADELIGHT] = user_input[
+                        CONF_SHOW_BLADELIGHT
+                    ]
                 else:
-                    self.data_attr = {
-                        CONF_HOST: user_input[CONF_HOST],
-                        CONF_PORT: user_input[CONF_PORT],
-                        "version": version,
-                        "name": name,
-                        CONF_SCAN_INTERVAL: user_input[CONF_SCAN_INTERVAL],
-                        CONF_SHOW_SUBDEVICES: user_input[CONF_SHOW_SUBDEVICES],
-                    }
+                    self.data_attr = {}
+                    self.data_attr[CONF_HOST] = user_input[CONF_HOST]
+                    self.data_attr[CONF_PORT] = user_input[CONF_PORT]
+                    self.data_attr["name"] = name
+                    self.data_attr["version"] = version
+                    self.data_attr[CONF_SCAN_INTERVAL] = user_input[CONF_SCAN_INTERVAL]
+                    self.data_attr[CONF_SHOW_SUBDEVICES] = user_input[
+                        CONF_SHOW_SUBDEVICES
+                    ]
+                    self.data_attr[CONF_SHOW_BLADELIGHT] = user_input[
+                        CONF_SHOW_BLADELIGHT
+                    ]
 
                 if user_input[CONF_ADVANCED] is True:
                     return await self._show_config_form_2(user_input)
@@ -108,6 +121,7 @@ class LedfxrmFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     vol.Optional(CONF_SCAN_INTERVAL, default=300): int,
                     vol.Optional(CONF_SHOW_SUBDEVICES, default=False): bool,
                     vol.Optional(CONF_ADVANCED, default=False): bool,
+                    vol.Optional(CONF_SHOW_BLADELIGHT, default=False): bool,
                 }
             ),
             errors=self._errors,

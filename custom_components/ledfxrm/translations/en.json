@@ -17,7 +17,8 @@
                     "stop_body": "JSON-Body for End-Endpoint",
                     "scan_interval": "Scan interval in seconds",
                     "advanced": "Add Start/Stop-Server custom-endpoint",
-                    "show_subdevices": "Create Entities for SubDevices?"
+                    "show_subdevices": "Create Entities for SubDevices",
+                    "show_blade_light": "EXPEREMENTAL: Add Blade-Light"
                 }
             },
             "user_2": {

@@ -19,6 +19,8 @@ from custom_components.ledfxrm.const import (
     NUMBER_PIXELS,
     ICON_STRIP_DEVICE,
     CONF_SHOW_SUBDEVICES,
+    CONF_SHOW_BLADELIGHT,
+    CONF_HOST,
     MANUFACTURER,
     VERSION,
 )
@@ -31,17 +33,23 @@ async def async_setup_entry(hass, entry, async_add_devices):
     """Setup sensor platform."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
     devicenames = coordinator.data.get("devices").get("devices")
-    test = coordinator.data.get(CONF_SHOW_SUBDEVICES)
-    # logging.warning("AND HERE WE GO: %s ----- %s", test, devicenames)
+    test = entry.data.get(CONF_SHOW_SUBDEVICES)
+    test2 = entry.data.get(CONF_SHOW_BLADELIGHT)
     if test is True:
         for k in devicenames:
             async_add_devices(
                 [LedfxrmChildLight(coordinator, entry, k, devicenames[k]["config"])]
             )
 
-    async_add_devices(
-        [LedfxrmBinaryLight(coordinator, entry), LedfxrmBladeLight(coordinator, entry)]
-    )
+    if test2 is True:
+        async_add_devices(
+            [
+                LedfxrmBinaryLight(coordinator, entry),
+                LedfxrmBladeLight(coordinator, entry),
+            ]
+        )
+    else:
+        async_add_devices([LedfxrmBinaryLight(coordinator, entry)])
 
 
 class LedfxrmBinaryLight(LedfxrmEntity, LightEntity):
@@ -237,11 +245,11 @@ class LedfxrmBladeLight(LedfxrmBinaryLight):
     async def async_turn_on(self, **kwargs):  # pylint: disable=unused-argument
         """Turn on the light."""
 
-        logging.warning(
-            "YZ02 \n %s \n ----- \n %s",
-            kwargs,
-            dir(kwargs),
-        )
+        # logging.warning(
+        #     "YZ02 \n %s \n ----- \n %s",
+        #     kwargs,
+        #     dir(kwargs),
+        # )
         if "hs_color" in kwargs:
             await self.coordinator.api.async_blade_on(kwargs)
         # await self.coordinator.api.async_set_scene(kwargs["effect"])
@@ -263,7 +271,8 @@ class LedfxrmBladeLight(LedfxrmBinaryLight):
     @property
     def supported_features(self) -> int:
         """Flag supported features."""
-        flags = SUPPORT_BRIGHTNESS | SUPPORT_COLOR
+        # flags = SUPPORT_BRIGHTNESS | SUPPORT_COLOR
+        flags = SUPPORT_COLOR
         return flags
 
     @property
@@ -299,16 +308,19 @@ class LedfxrmBladeLight(LedfxrmBinaryLight):
     @property
     def device_state_attributes(self) -> Optional[Dict[str, Any]]:
         """Return the state attributes of the entity."""
-        # logging.warning("OMMMMG: %s ", self.coordinator.api.devicestates)
-        # if self.deviceconfig == {}:
-        #     return {'status': 'error'}
-        # return {
-        #     'IP': self.deviceconfig['ip_address'],
-        #     'Pixels': self.deviceconfig['pixel_count'],
-        #     'Refresh Rate': self.deviceconfig['refresh_rate'],
-        #     'Mode': self.coordinator.api.devicestates[self.devicename]['effect'].get('name', 'OFF')
-        # }
-        return {"test": True}
+        devicenames = self.coordinator.data.get("devices").get("devices")
+        pixels = 0
+        for k in devicenames:
+            pixels = pixels + devicenames[k]["config"].get("pixel_count")
+
+        # logging.warning("OMMMMG: %s ", devicenames)
+
+        # return {"Pixels": pixels, "Devices": list(devicenames.keys())}
+        return {
+            "Pixels": pixels,
+            "Devices": len(list(devicenames.keys())),
+            "Description": "One to rule them all",
+        }
 
     @property
     def is_on(self):
