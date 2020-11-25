@@ -131,6 +131,7 @@ class myClient:
         self.thestart_body = thestart_body
         self.thestop_method = thestop_method
         self.thestop_body = thestop_body
+        self._transition_time = 0.02
 
     async def update(self):
         url = "http://" + self.thehost + ":" + str(self.theport) + "/api/info"
@@ -183,6 +184,9 @@ class myClient:
             "scenes": rest_scenes,
             "show_subdevices": self.thesubdevices,
         }
+
+    async def async_set_transition_time(self, time):
+        self._transition_time = time
 
     async def async_change_something(self, state):
         loop = asyncio.get_event_loop()
@@ -362,10 +366,16 @@ class myClient:
                     ),
                 )
                 sleep(0.02)
+
         return None
 
     async def async_blade_on(self, state):
-        # logging.warning("CHECK THIS: %s", state.get("hs_color")[0])
+        # logging.warning(
+        #     "CHECK THIS: %s ------------- %s",
+        #     self._transition_time,
+        #     state.get("hs_color")[0],
+        # )
+
         testcolor = color_hs_to_RGB(state.get("hs_color")[0], state.get("hs_color")[1])
         b = OrderedDict(self.devices.get("devices"))
         for key in sorted(b):
@@ -395,7 +405,8 @@ class myClient:
                         21324,
                     ),
                 )
-                sleep(0.02)
+                sleep(self._transition_time)
+        self._hs = state.get("hs_color")
         return None
 
 

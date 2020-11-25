@@ -2,7 +2,9 @@
 from homeassistant.components.light import (
     LightEntity,
     ATTR_EFFECT,
+    ATTR_HS_COLOR,
     SUPPORT_EFFECT,
+    SUPPORT_TRANSITION,
     SUPPORT_BRIGHTNESS,
     ATTR_EFFECT_LIST,
     SUPPORT_COLOR,
@@ -44,15 +46,15 @@ async def async_setup_entry(hass, entry, async_add_devices):
     if test2 is True:
         async_add_devices(
             [
-                LedfxrmBinaryLight(coordinator, entry),
+                LedfxrmLight(coordinator, entry),
                 LedfxrmBladeLight(coordinator, entry),
             ]
         )
     else:
-        async_add_devices([LedfxrmBinaryLight(coordinator, entry)])
+        async_add_devices([LedfxrmLight(coordinator, entry)])
 
 
-class LedfxrmBinaryLight(LedfxrmEntity, LightEntity):
+class LedfxrmLight(LedfxrmEntity, LightEntity):
     """ledfxrm light class."""
 
     async def async_turn_on(self, **kwargs):  # pylint: disable=unused-argument
@@ -126,7 +128,7 @@ class LedfxrmBinaryLight(LedfxrmEntity, LightEntity):
         return self.coordinator.api.connected
 
 
-class LedfxrmChildLight(LedfxrmBinaryLight):
+class LedfxrmChildLight(LedfxrmLight):
     """ledfxrm light class."""
 
     def __init__(
@@ -223,13 +225,22 @@ class LedfxrmChildLight(LedfxrmBinaryLight):
         return self.coordinator.api.devicestates[self.devicename]["power"]
 
 
-class LedfxrmBladeLight(LedfxrmBinaryLight):
+class LedfxrmBladeLight(LedfxrmLight):
     """ledfxrm light class."""
 
     def __init__(self, coordinator, config_entry={}):
         super().__init__(coordinator, config_entry)
         self.config_entry = config_entry
         self.entity_id = "ledfxrm.ledfxrm"
+        self._hs = None
+        self._transition_time = 0.00
+        self._effectlist = [
+            "wipe 0.01",
+            "wipe 0.02",
+            "wipe 0.03",
+            "wipe 0.04",
+            "wipe 0.05",
+        ]
         # self.devicename = devicename
         self.coordinator = coordinator
         # self.config_entry = LightEntity
@@ -246,12 +257,22 @@ class LedfxrmBladeLight(LedfxrmBinaryLight):
         """Turn on the light."""
 
         # logging.warning(
-        #     "YZ02 \n %s \n ----- \n %s",
+        #     "YZ02 \n %s \n",
         #     kwargs,
-        #     dir(kwargs),
         # )
         if "hs_color" in kwargs:
             await self.coordinator.api.async_blade_on(kwargs)
+            self._hs = kwargs["hs_color"]
+        if "effect" in kwargs:
+            # logging.warning(
+            #     "YZ03 \n %s \n",
+            #     float(kwargs["effect"].split()[1]),
+            # )
+            await self.coordinator.api.async_set_transition_time(
+                float(kwargs["effect"].split()[1])
+            )
+            # await self.coordinator.api.async_blade_on(kwargs)
+            # self._hs = kwargs["hs_color"]
         # await self.coordinator.api.async_set_scene(kwargs["effect"])
         # await self.coordinator.async_request_refresh()
         # return True
@@ -264,6 +285,11 @@ class LedfxrmBladeLight(LedfxrmBinaryLight):
 
     async def async_turn_off(self, **kwargs):  # pylint: disable=unused-argument
         """Turn off the light."""
+
+        logging.warning(
+            "YZ02 \n %s \n",
+            kwargs,
+        )
         # await self.coordinator.api.async_change_something(False)
         await self.coordinator.api.async_blade_off()
         await self.coordinator.async_request_refresh()
@@ -272,8 +298,22 @@ class LedfxrmBladeLight(LedfxrmBinaryLight):
     def supported_features(self) -> int:
         """Flag supported features."""
         # flags = SUPPORT_BRIGHTNESS | SUPPORT_COLOR
-        flags = SUPPORT_COLOR
+        flags = SUPPORT_EFFECT | SUPPORT_COLOR
         return flags
+
+    @property
+    def hs_color(self) -> tuple:
+        """Return the color property."""
+        return self._hs
+
+    # @property
+    # def effect(self):
+    #     """Return the current effect."""
+    #     return self._effect
+
+    @property
+    def effect_list(self):
+        return self._effectlist
 
     @property
     def assumed_state(self):
@@ -294,16 +334,6 @@ class LedfxrmBladeLight(LedfxrmBinaryLight):
     def icon(self):
         """Return the icon of this light."""
         return ICON_STRIP_DEVICE
-
-    @property
-    def effect(self):
-        """Return the current effect."""
-        return None
-
-    @property
-    def effect_list(self):
-        """Return the icon of this light."""
-        return None
 
     @property
     def device_state_attributes(self) -> Optional[Dict[str, Any]]:
