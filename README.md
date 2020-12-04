@@ -19,7 +19,7 @@
 - Display the number of scenes/devices/pixels connected to LedFx
 - Start and stop the LedFx server (custom Endpoint required!)
 
-### LedFx Device Remote.
+### LedFx Device Remote
 
 - Toggle the power for devices configured in LedFx
 - Display number of pixels per device

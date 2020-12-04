@@ -12,8 +12,11 @@ from time import sleep
 import homeassistant.loader as loader
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import Config, HomeAssistant
-from homeassistant.exceptions import ConfigEntryNotReady
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.exceptions import ConfigEntryNotReady, PlatformNotReady
+from homeassistant.helpers.update_coordinator import (
+    DataUpdateCoordinator,
+    UpdateFailed,
+)
 from homeassistant.util.color import color_hs_to_RGB
 from homeassistant import bootstrap
 
@@ -138,44 +141,104 @@ class myClient:
         url2 = "http://" + self.thehost + ":" + str(self.theport) + "/api/devices"
         url3 = "http://" + self.thehost + ":" + str(self.theport) + "/api/scenes"
         yz = {}
+        rest_info = {}
+        rest_devices = {}
+        rest_scenes = {}
         yz["rest_info"] = {}
         yz["rest_devices"] = {}
         yz["rest_scenes"] = {}
 
         loop = asyncio.get_event_loop()
         async with aiohttp.ClientSession(loop=loop, trust_env=True) as session:
-            async with session.get(url, ssl=False) as resp:
-                rest_info = await resp.json()
-                yz["rest_info"] = rest_info
+            try:
+                async with session.get(url, ssl=False) as response:
+                    if response.status == 200:
+                        rest_info = await response.json()
+                        yz["rest_info"] = rest_info
+                    else:
+                        logging.warning(
+                            "CANT CONNECT TO LEDFX - INFO: %s", response.status
+                        )
 
-            async with session.get(url2, ssl=False) as resp_devices:
-                rest_devices = await resp_devices.json()
-                yz["rest_devices"] = rest_devices
-                self.devices = yz["rest_devices"]
-                # logging.warning("INTERNAL STATES b4: %s", self.devicestates)
-                if len(self.devicestates) == 0:
-                    for k in rest_devices["devices"]:
-                        # logging.warning("NOWWW: %s", k)
-                        # logging.warning("THENN: %s", rest_devices['devices'][k])
-                        if len(rest_devices["devices"][k].get("effect", {})) > 0:
-                            # logging.warning("GOT EFFECT FROM LEDFX: %s", rest_devices['devices'][k].get('effect'))
-                            effect = rest_devices["devices"][k].get("effect")
-                            power = True
-                        else:
+            except aiohttp.ClientConnectorError as e:
+                # logging.warning("CANT CONNECT TO LEDFX - INFO - 2: %s", e)
+                # raise PlatformNotReady
+                return {}
 
-                            effect = {}
-                            power = False
-                        self.devicestates[k] = {
-                            "power": power,
-                            "effect": effect,  # self.devicestates[k].get('effect', {})
-                        }
-                # logging.warning("INTERNAL STATES after: %s", self.devicestates)
+            try:
+                async with session.get(url2, ssl=False) as resp_devices:
+                    if resp_devices.status == 200:
+                        rest_devices = await resp_devices.json()
+                        yz["rest_devices"] = rest_devices
+                        self.devices = yz["rest_devices"]
+                        if len(self.devicestates) == 0:
+                            for k in rest_devices["devices"]:
+                                if (
+                                    len(rest_devices["devices"][k].get("effect", {}))
+                                    > 0
+                                ):
+                                    effect = rest_devices["devices"][k].get("effect")
+                                    power = True
+                                else:
 
-            async with session.get(url3, ssl=False) as resp_scenes:
-                rest_scenes = await resp_scenes.json()
-                yz["rest_scenes"] = rest_scenes
+                                    effect = {}
+                                    power = False
+                                self.devicestates[k] = {
+                                    "power": power,
+                                    "effect": effect,
+                                }
+                    else:
+                        logging.warning(
+                            "CANT CONNECT TO LEDFX - DEVICES: %s", resp_devices.status
+                        )
 
-        if len(rest_info) > 0:
+            except aiohttp.ClientConnectorError as e:
+                logging.warning("CANT CONNECT TO LEDFX - DEVICES - 2: %s", e)
+
+            try:
+                async with session.get(url3, ssl=False) as resp_scenes:
+                    if resp_scenes.status == 200:
+                        rest_scenes = await resp_scenes.json()
+                        yz["rest_scenes"] = rest_scenes
+                    else:
+                        logging.warning(
+                            "CANT CONNECT TO LEDFX - SCENES: %s", resp_scenes.status
+                        )
+
+            except aiohttp.ClientConnectorError as e:
+                logging.warning("CANT CONNECT TO LEDFX - SCENES - 2: %s", e)
+            # async with session.get(url, ssl=False) as resp:
+            #     rest_info = await resp.json()
+            #     yz["rest_info"] = rest_info
+
+            # async with session.get(url2, ssl=False) as resp_devices:
+            #     rest_devices = await resp_devices.json()
+            #     yz["rest_devices"] = rest_devices
+            #     self.devices = yz["rest_devices"]
+            #     # logging.warning("INTERNAL STATES b4: %s", self.devicestates)
+            #     if len(self.devicestates) == 0:
+            #         for k in rest_devices["devices"]:
+            #             # logging.warning("NOWWW: %s", k)
+            #             # logging.warning("THENN: %s", rest_devices['devices'][k])
+            #             if len(rest_devices["devices"][k].get("effect", {})) > 0:
+            #                 # logging.warning("GOT EFFECT FROM LEDFX: %s", rest_devices['devices'][k].get('effect'))
+            #                 effect = rest_devices["devices"][k].get("effect")
+            #                 power = True
+            #             else:
+
+            #                 effect = {}
+            #                 power = False
+            #             self.devicestates[k] = {
+            #                 "power": power,
+            #                 "effect": effect,  # self.devicestates[k].get('effect', {})
+            #             }
+            #     # logging.warning("INTERNAL STATES after: %s", self.devicestates)
+
+            # async with session.get(url3, ssl=False) as resp_scenes:
+            #     rest_scenes = await resp_scenes.json()
+            #     yz["rest_scenes"] = rest_scenes
+
+        if rest_info is not None:
             self.connected = True
 
         return {
@@ -224,23 +287,23 @@ class myClient:
                 if self.thestop_method == "GET":
                     async with session.get(
                         "http://" + self.thestop, ssl=False
-                    ) as resp_start:
-                        logging.debug("start: %s", resp_start)
+                    ) as resp_stop:
+                        logging.debug("start: %s", resp_stop)
                 if self.thestop_method == "DELETE":
                     async with session.delete(
                         "http://" + self.thestop, ssl=False
-                    ) as resp_start:
-                        logging.debug("start: %s", resp_start)
+                    ) as resp_stop:
+                        logging.debug("start: %s", resp_stop)
                 if self.thestop_method == "PUT":
                     async with session.put(
                         "http://" + self.thestop, json=self.thestop_body, ssl=False
-                    ) as resp_start:
-                        logging.debug("start: %s", resp_start)
+                    ) as resp_stop:
+                        logging.debug("start: %s", resp_stop)
                 if self.thestop_method == "POST":
                     async with session.post(
                         "http://" + self.thestop, json=self.thestop_body, ssl=False
-                    ) as resp_start:
-                        logging.debug("start: %s", resp_start)
+                    ) as resp_stop:
+                        logging.debug("start: %s", resp_stop)
 
                 async with session.get(
                     "http://" + self.thestop, ssl=False
@@ -465,16 +528,44 @@ class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
         try:
             # logging.warning('SCAN_INTERVAL_CHECK %s', self.thescan)
             data = await self.api.update()
-            scenes = data.get("scenes").get("scenes")
-            devices = data.get("devices").get("devices")
-            self.scenes = scenes
-            self.devices = devices
+            scenes = {}
+            devices = {}
+            # logging.warning("UPDATING %s", data)
+            if data != {}:
 
-            self.number_scenes = len(scenes)
+                scenes = data.get("scenes").get("scenes")
+                devices = data.get("devices").get("devices")
+                if scenes != {}:
+                    logging.warning("UPDATING WTF %s", data)
+                    self.scenes = scenes
+                    self.devices = devices
+                    self.number_scenes = len(scenes)
+                    self.lost = False
+                    self.connected = True
+                    self.available = True
+                return data
 
-            return data
+            if self.lost is not True:
+                logging.warning("UPDATE FAILED %s", data)
+                self.connected = False
+                self.available = False
+                self.lost = True
+                raise PlatformNotReady
         except Exception as exception:
-            raise UpdateFailed(exception)
+            # raise PlatformNotReady
+            # raise UpdateFailed(exception)
+            # logging.warning("UPDATE FAILED 2 %s", exception)
+            if hasattr(self, "lost"):
+                if self.lost is not True:
+                    self.connected = False
+                    self.available = False
+                    self.lost = True
+                    raise UpdateFailed(exception)
+            return {
+                "info": {"name": "Not Ready", "version": "1.0"},
+                "scenes": {"scenes": {}},
+                "devices": {"devices": {}},
+            }
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
