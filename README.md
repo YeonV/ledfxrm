@@ -32,7 +32,7 @@
 
 ## Requirements:
 
-- [LedFx](https://github.com/ahodges9/LedFx)
+- [LedFx](https://github.com/ahodges9/LedFx/tree/dev)
   - minimum version: v0.84 (so atm you need the dev-branch or ledfx-dev)
   - with at least one scene setup
   - the ledfx config.yaml file defines your host as 127.0.0.1 by default. The host needs to be changed to  0.0.0.0 in order for this integration to function properly.
