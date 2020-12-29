@@ -500,11 +500,11 @@ class myClient:
         c = sorted(b, key=lambda x: x.get("order_number"))
         # logging.warning("B: %s \n C: %s \n\n", b, c)
         for key in c:
-            logging.warning(
-                "VIRTUAL ON internal --- %s: %s",
-                key.get("name"),
-                key.get("invert"),
-            )
+            # logging.warning(
+            #     "VIRTUAL ON internal --- %s: %s",
+            #     key.get("name"),
+            #     key.get("pixel_density"),
+            # )
             for i in range(key.get("used_pixel")):
 
                 m = []
@@ -523,7 +523,10 @@ class myClient:
                         21324,
                     ),
                 )
-                sleep(self._transition_time)
+                if key.get("pixel_density") is not None:
+                    sleep((60 / key.get("pixel_density")) * self._transition_time)
+                else:
+                    sleep(self._transition_time)
         self._hs = state.get("hs_color")
         return None
 
