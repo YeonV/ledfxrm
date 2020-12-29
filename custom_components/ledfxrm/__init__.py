@@ -130,6 +130,7 @@ class myClient:
         self.theblade_light = theblade_light
         self.devicestates = {}
         self.devices = {}
+        self.virtuals = {}
         self.thestart_method = thestart_method
         self.thestart_body = thestart_body
         self.thestop_method = thestop_method
@@ -140,13 +141,16 @@ class myClient:
         url = "http://" + self.thehost + ":" + str(self.theport) + "/api/info"
         url2 = "http://" + self.thehost + ":" + str(self.theport) + "/api/devices"
         url3 = "http://" + self.thehost + ":" + str(self.theport) + "/api/scenes"
+        url4 = "http://" + self.thehost + ":" + str(self.theport) + "/api/virtuals"
         yz = {}
         rest_info = {}
         rest_devices = {}
         rest_scenes = {}
+        rest_virtuals = {}
         yz["rest_info"] = {}
         yz["rest_devices"] = {}
         yz["rest_scenes"] = {}
+        yz["rest_virtuals"] = {}
 
         loop = asyncio.get_event_loop()
         async with aiohttp.ClientSession(loop=loop, trust_env=True) as session:
@@ -207,6 +211,21 @@ class myClient:
 
             except aiohttp.ClientConnectorError as e:
                 logging.warning("CANT CONNECT TO LEDFX - SCENES - 2: %s", e)
+
+            try:
+                async with session.get(url4, ssl=False) as resp_virtuals:
+                    if resp_virtuals.status == 200:
+                        rest_virtuals = await resp_virtuals.json()
+                        yz["rest_virtuals"] = rest_virtuals
+                        self.virtuals = yz["rest_virtuals"]
+                        # logging.warning("VIRTUALS: %s", rest_virtuals)
+                    else:
+                        logging.warning(
+                            "CANT CONNECT TO LEDFX - VIRTUALS: %s", resp_virtuals.status
+                        )
+
+            except aiohttp.ClientConnectorError as e:
+                logging.warning("CANT CONNECT TO LEDFX - VIRTUALS - 2: %s", e)
             # async with session.get(url, ssl=False) as resp:
             #     rest_info = await resp.json()
             #     yz["rest_info"] = rest_info
@@ -244,6 +263,7 @@ class myClient:
         return {
             "info": rest_info,
             "devices": rest_devices,
+            "virtuals": rest_virtuals,
             "scenes": rest_scenes,
             "show_subdevices": self.thesubdevices,
         }
@@ -435,8 +455,8 @@ class myClient:
     async def async_blade_on(self, state):
         # logging.warning(
         #     "CHECK THIS: %s ------------- %s",
-        #     self._transition_time,
-        #     state.get("hs_color")[0],
+        #     self.virtuals,
+        #     state,
         # )
 
         testcolor = color_hs_to_RGB(state.get("hs_color")[0], state.get("hs_color")[1])
@@ -465,6 +485,41 @@ class myClient:
                         .get(key)
                         .get("config")
                         .get("ip_address"),
+                        21324,
+                    ),
+                )
+                sleep(self._transition_time)
+        self._hs = state.get("hs_color")
+        return None
+
+    async def async_virtual_on(self, state):
+        # logging.warning("CHECK THIS: %s", state)
+
+        testcolor = color_hs_to_RGB(state.get("hs_color")[0], state.get("hs_color")[1])
+        b = self.virtuals.get("virtuals").get("list")[0].get("items")
+        c = sorted(b, key=lambda x: x.get("order_number"))
+        # logging.warning("B: %s \n C: %s \n\n", b, c)
+        for key in c:
+            logging.warning(
+                "VIRTUAL ON internal --- %s: %s",
+                key.get("name"),
+                key.get("invert"),
+            )
+            for i in range(key.get("used_pixel")):
+
+                m = []
+                m.append(1)
+                m.append(255)
+                if key.get("invert") == True:
+                    m.append(key.get("led_end") - i - 1)
+                else:
+                    m.append(key.get("led_start") + i - 1)
+                m.extend(testcolor)
+                m = bytes(m)
+                _sock.sendto(
+                    m,
+                    (
+                        key.get("config").get("ip_address"),
                         21324,
                     ),
                 )
@@ -530,6 +585,7 @@ class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
             data = await self.api.update()
             scenes = {}
             devices = {}
+            virtuals = {}
             # logging.warning("UPDATING %s", data)
             if data != {}:
 
@@ -543,6 +599,11 @@ class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
                     self.lost = False
                     self.connected = True
                     self.available = True
+
+                virtuals = data.get("virtuals").get("virtuals")
+                if virtuals != {}:
+                    # logging.warning("YYYEEEEESSSS %s", virtuals)
+                    self.virtuals = virtuals
                 return data
 
             if self.lost is not True:
@@ -565,6 +626,7 @@ class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
                 "info": {"name": "Not Ready", "version": "1.0"},
                 "scenes": {"scenes": {}},
                 "devices": {"devices": {}},
+                "virtuals": {"virtuals": {}},
             }
 
 
