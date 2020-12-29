@@ -18,7 +18,7 @@
                     "scan_interval": "Scan interval in seconds",
                     "advanced": "Add Start/Stop-Server custom-endpoint",
                     "show_subdevices": "Create Entities for SubDevices",
-                    "show_blade_light": "EXPEREMENTAL: Add Blade-Light"
+                    "show_blade_light": "Add Virtual-Lights (requires LedFx >0.9.2)"
                 }
             },
             "user_2": {

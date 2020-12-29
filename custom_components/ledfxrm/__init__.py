@@ -419,96 +419,20 @@ class myClient:
         self.devicestates[state]["power"] = True
         return None
 
-    async def async_blade_off(self):
-        b = OrderedDict(self.devices.get("devices"))
-        for key in sorted(b):
-            # logging.warning(
-            #     "BLADE OFF internal --- %s --- %s --- %s",
-            #     self.devices.get("devices").get(key).get("config").get("name"),
-            #     self.devices.get("devices").get(key).get("config").get("ip_address"),
-            #     self.devices.get("devices").get(key).get("config").get("pixel_count"),
-            # )
-            for i in range(
-                self.devices.get("devices").get(key).get("config").get("pixel_count")
-            ):
-
-                m = []
-                m.append(1)
-                m.append(255)
-                m.append(i)
-                m.extend([0, 0, 0])
-                m = bytes(m)
-                _sock.sendto(
-                    m,
-                    (
-                        self.devices.get("devices")
-                        .get(key)
-                        .get("config")
-                        .get("ip_address"),
-                        21324,
-                    ),
-                )
-                sleep(0.02)
-
-        return None
-
-    async def async_blade_on(self, state):
-        # logging.warning(
-        #     "CHECK THIS: %s ------------- %s",
-        #     self.virtuals,
-        #     state,
-        # )
-
-        testcolor = color_hs_to_RGB(state.get("hs_color")[0], state.get("hs_color")[1])
-        b = OrderedDict(self.devices.get("devices"))
-        for key in sorted(b):
-            # logging.warning(
-            #     "BLADE ON internal --- %s --- %s --- %s",
-            #     self.devices.get("devices").get(key).get("config").get("name"),
-            #     self.devices.get("devices").get(key).get("config").get("ip_address"),
-            #     self.devices.get("devices").get(key).get("config").get("pixel_count"),
-            # )
-            for i in range(
-                self.devices.get("devices").get(key).get("config").get("pixel_count")
-            ):
-
-                m = []
-                m.append(1)
-                m.append(255)
-                m.append(i)
-                m.extend(testcolor)
-                m = bytes(m)
-                _sock.sendto(
-                    m,
-                    (
-                        self.devices.get("devices")
-                        .get(key)
-                        .get("config")
-                        .get("ip_address"),
-                        21324,
-                    ),
-                )
-                sleep(self._transition_time)
-        self._hs = state.get("hs_color")
-        return None
-
-    async def async_virtual_on(self, state, virtual):
+    async def async_virtual_off(self, virtual):
         test = next(
             v
             for v in self.virtuals.get("virtuals").get("list")
             if v.get("name") == virtual.split("Virtual: ")[1]
         )
-        # logging.warning("CHECK THIS: %s", test)
-
-        testcolor = color_hs_to_RGB(state.get("hs_color")[0], state.get("hs_color")[1])
         b = test.get("items")
         c = sorted(b, key=lambda x: x.get("order_number"))
-        # logging.warning("B: %s \n C: %s \n\n", b, c)
         for key in c:
             # logging.warning(
-            #     "VIRTUAL ON internal --- %s: %s",
-            #     key.get("name"),
-            #     key.get("pixel_density"),
+            #     "BLADE OFF internal --- %s --- %s --- %s",
+            #     self.devices.get("devices").get(key).get("config").get("name"),
+            #     self.devices.get("devices").get(key).get("config").get("ip_address"),
+            #     self.devices.get("devices").get(key).get("config").get("pixel_count"),
             # )
             for i in range(key.get("used_pixel")):
 
@@ -519,7 +443,7 @@ class myClient:
                     m.append(key.get("led_end") - i - 1)
                 else:
                     m.append(key.get("led_start") + i - 1)
-                m.extend(testcolor)
+                m.extend([0, 0, 0])
                 m = bytes(m)
                 _sock.sendto(
                     m,
@@ -532,7 +456,55 @@ class myClient:
                     sleep((60 / key.get("pixel_density")) * self._transition_time)
                 else:
                     sleep(self._transition_time)
-        self._hs = state.get("hs_color")
+        return None
+
+    async def async_virtual_on(self, state, virtual):
+        test = next(
+            v
+            for v in self.virtuals.get("virtuals").get("list")
+            if v.get("name") == virtual.split("Virtual: ")[1]
+        )
+        if hasattr(self, "_hs"):
+            # SAME COLOR
+            if state.get("hs_color") == self._hs:
+                return None
+
+        if state == {}:
+            # POWERED ON WITHOUT COLOR SENT
+            if hasattr(self, "_hs"):
+                state["hs_color"] = self._hs
+            else:
+                state["hs_color"] = (30.0, 100.0)
+
+        if state.get("hs_color") is not None:
+            testcolor = color_hs_to_RGB(
+                state.get("hs_color")[0], state.get("hs_color")[1]
+            )
+            b = test.get("items")
+            c = sorted(b, key=lambda x: x.get("order_number"))
+            for key in c:
+                for i in range(key.get("used_pixel")):
+                    m = []
+                    m.append(1)
+                    m.append(255)
+                    if key.get("invert") == True:
+                        m.append(key.get("led_end") - i - 1)
+                    else:
+                        m.append(key.get("led_start") + i - 1)
+                    m.extend(testcolor)
+                    m = bytes(m)
+                    _sock.sendto(
+                        m,
+                        (
+                            key.get("config").get("ip_address"),
+                            21324,
+                        ),
+                    )
+                    if key.get("pixel_density") is not None:
+                        sleep((60 / key.get("pixel_density")) * self._transition_time)
+                    else:
+                        sleep(self._transition_time)
+            self._hs = state.get("hs_color")
         return None
 
 

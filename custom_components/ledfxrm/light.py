@@ -47,12 +47,7 @@ async def async_setup_entry(hass, entry, async_add_devices):
             )
 
     if test2 is True:
-        async_add_devices(
-            [
-                LedfxrmLight(coordinator, entry),
-                LedfxrmBladeLight(coordinator, entry),
-            ]
-        )
+        async_add_devices([LedfxrmLight(coordinator, entry)])
         for k in virtuals:
             async_add_devices([LedfxrmVirtualsLight(coordinator, entry, k)])
     else:
@@ -147,19 +142,10 @@ class LedfxrmChildLight(LedfxrmLight):
         self.config_entry = config_entry
         self.entity_id = "ledfxrm.ledfxrm"
         self.devicename = devicename
-        # self.coordinator = coordinator
-        # self.config_entry = LightEntity
         self.deviceconfig = deviceconfig
-        # logging.warning("WTTTTFFFFFFF \nCOOOOO: %s", coordinator)
-        # logging.warning("WTTTTFFFFFFF \nName: %s\nConfig: %s", devicename, deviceconfig)
 
     async def async_turn_on(self, **kwargs):  # pylint: disable=unused-argument
         """Turn on the light."""
-        # if ATTR_EFFECT in kwargs:
-        # await self.coordinator.api.async_set_scene(kwargs['effect'])
-        # await self.coordinator.async_request_refresh()
-        #    return True
-
         await self.coordinator.api.async_device_on(self.devicename)
         await self.coordinator.async_request_refresh()
 
@@ -230,140 +216,6 @@ class LedfxrmChildLight(LedfxrmLight):
         return self.coordinator.api.devicestates[self.devicename]["power"]
 
 
-class LedfxrmBladeLight(LedfxrmLight):
-    """ledfxrm light class."""
-
-    def __init__(self, coordinator, config_entry={}):
-        super().__init__(coordinator, config_entry)
-        self.config_entry = config_entry
-        self.entity_id = "ledfxrm.ledfxrm"
-        self._hs = None
-        self._transition_time = 0.00
-        self._effectlist = [
-            "wipe 0.01",
-            "wipe 0.02",
-            "wipe 0.03",
-            "wipe 0.04",
-            "wipe 0.05",
-        ]
-        # self.devicename = devicename
-        self.coordinator = coordinator
-        # self.config_entry = LightEntity
-        # self.deviceconfig = deviceconfig
-
-        # logging.warning(
-        #     "YZ01 \n %s \n ----- \n %s",
-        #     self.coordinator.api.devicestates,
-        #     dir(self.coordinator.api),
-        # )
-        # logging.warning("WTTTTFFFFFFF \nName: %s\nConfig: %s", devicename, deviceconfig)
-
-    async def async_turn_on(self, **kwargs):  # pylint: disable=unused-argument
-        """Turn on the light."""
-
-        # logging.warning(
-        #     "YZ02 \n %s \n",
-        #     kwargs,
-        # )
-        if "hs_color" in kwargs:
-            await self.coordinator.api.async_blade_on(kwargs)
-            self._hs = kwargs["hs_color"]
-        if "effect" in kwargs:
-            # logging.warning(
-            #     "YZ03 \n %s \n",
-            #     float(kwargs["effect"].split()[1]),
-            # )
-            await self.coordinator.api.async_set_transition_time(
-                float(kwargs["effect"].split()[1])
-            )
-            # await self.coordinator.api.async_blade_on(kwargs)
-            # self._hs = kwargs["hs_color"]
-        # await self.coordinator.api.async_set_scene(kwargs["effect"])
-        # await self.coordinator.async_request_refresh()
-        # return True
-        # if ATTR_EFFECT in kwargs:
-        # await self.coordinator.api.async_set_scene(kwargs['effect'])
-        # await self.coordinator.async_request_refresh()
-        #    return True
-
-        await self.coordinator.async_request_refresh()
-
-    async def async_turn_off(self, **kwargs):  # pylint: disable=unused-argument
-        """Turn off the light."""
-
-        logging.warning(
-            "YZ02 \n %s \n",
-            kwargs,
-        )
-        # await self.coordinator.api.async_change_something(False)
-        await self.coordinator.api.async_blade_off()
-        await self.coordinator.async_request_refresh()
-
-    @property
-    def supported_features(self) -> int:
-        """Flag supported features."""
-        # flags = SUPPORT_BRIGHTNESS | SUPPORT_COLOR
-        flags = SUPPORT_EFFECT | SUPPORT_COLOR
-        return flags
-
-    @property
-    def hs_color(self) -> tuple:
-        """Return the color property."""
-        return self._hs
-
-    # @property
-    # def effect(self):
-    #     """Return the current effect."""
-    #     return self._effect
-
-    @property
-    def effect_list(self):
-        return self._effectlist
-
-    @property
-    def assumed_state(self):
-        """Return the name of the switch."""
-        return True
-
-    @property
-    def unique_id(self):
-        """Return a unique ID to use for this entity."""
-        return self.config_entry.entry_id + ".blade-light"
-
-    @property
-    def name(self):
-        """Return the name of the light."""
-        return "Blade Light"
-
-    @property
-    def icon(self):
-        """Return the icon of this light."""
-        return ICON_STRIP_DEVICE
-
-    @property
-    def device_state_attributes(self) -> Optional[Dict[str, Any]]:
-        """Return the state attributes of the entity."""
-        devicenames = self.coordinator.data.get("devices").get("devices")
-        pixels = 0
-        for k in devicenames:
-            pixels = pixels + devicenames[k]["config"].get("pixel_count")
-
-        # logging.warning("OMMMMG: %s ", devicenames)
-
-        # return {"Pixels": pixels, "Devices": list(devicenames.keys())}
-        return {
-            "Pixels": pixels,
-            "Devices": len(list(devicenames.keys())),
-            "Description": "One to rule them all",
-        }
-
-    @property
-    def is_on(self):
-        """Return true if the light is on."""
-        # return self.coordinator.api.devicestates[self.devicename]["power"]
-        return True
-
-
 class LedfxrmVirtualsLight(LedfxrmLight):
     """ledfxrm light class."""
 
@@ -372,7 +224,6 @@ class LedfxrmVirtualsLight(LedfxrmLight):
         coordinator,
         config_entry={},
         virtual={"name": "NoName"},
-        # deviceconfig={"NoConfig": "NoConfig"},
     ):
         super().__init__(coordinator, config_entry)
         self.config_entry = config_entry
@@ -387,57 +238,25 @@ class LedfxrmVirtualsLight(LedfxrmLight):
             "wipe 0.04",
             "wipe 0.05",
         ]
-        # self.devicename = devicename
         self.coordinator = coordinator
-        # self.config_entry = LightEntity
-        # self.deviceconfig = deviceconfig
-
-        # logging.warning(
-        #     "YZ01 \n %s \n ----- \n %s",
-        #     self.coordinator.api.devicestates,
-        #     dir(self.coordinator.api),
-        # )
-        # logging.warning("WTTTTFFFFFFF \nName: %s\nConfig: %s", devicename, deviceconfig)
 
     async def async_turn_on(self, **kwargs):  # pylint: disable=unused-argument
         """Turn on the light."""
 
-        # logging.warning(
-        #     "YZ02 \n %s \n",
-        #     kwargs,
-        # )
         if "hs_color" in kwargs:
             await self.coordinator.api.async_virtual_on(kwargs, self.name)
             self._hs = kwargs["hs_color"]
         if "effect" in kwargs:
-            # logging.warning(
-            #     "YZ03 \n %s \n",
-            #     float(kwargs["effect"].split()[1]),
-            # )
             await self.coordinator.api.async_set_transition_time(
                 float(kwargs["effect"].split()[1])
             )
-            # await self.coordinator.api.async_blade_on(kwargs)
-            # self._hs = kwargs["hs_color"]
-        # await self.coordinator.api.async_set_scene(kwargs["effect"])
-        # await self.coordinator.async_request_refresh()
-        # return True
-        # if ATTR_EFFECT in kwargs:
-        # await self.coordinator.api.async_set_scene(kwargs['effect'])
-        # await self.coordinator.async_request_refresh()
-        #    return True
-
+        await self.coordinator.api.async_virtual_on(kwargs, self.name)
         await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self, **kwargs):  # pylint: disable=unused-argument
         """Turn off the light."""
 
-        logging.warning(
-            "YZ02 \n %s \n",
-            kwargs,
-        )
-        # await self.coordinator.api.async_change_something(False)
-        await self.coordinator.api.async_blade_off()
+        await self.coordinator.api.async_virtual_off(self.name)
         await self.coordinator.async_request_refresh()
 
     @property
@@ -448,7 +267,6 @@ class LedfxrmVirtualsLight(LedfxrmLight):
     @property
     def supported_features(self) -> int:
         """Flag supported features."""
-        # flags = SUPPORT_BRIGHTNESS | SUPPORT_COLOR
         flags = SUPPORT_EFFECT | SUPPORT_COLOR
         return flags
 
@@ -460,6 +278,13 @@ class LedfxrmVirtualsLight(LedfxrmLight):
     @property
     def effect_list(self):
         return self._effectlist
+
+    # @property
+    # def effect(self):
+    #     # if self.effect is not None:
+    #     #     return self.effect
+    #     # else:
+    #     return "wipe 0.01"
 
     @property
     def assumed_state(self):
