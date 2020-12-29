@@ -492,11 +492,16 @@ class myClient:
         self._hs = state.get("hs_color")
         return None
 
-    async def async_virtual_on(self, state):
-        # logging.warning("CHECK THIS: %s", state)
+    async def async_virtual_on(self, state, virtual):
+        test = next(
+            v
+            for v in self.virtuals.get("virtuals").get("list")
+            if v.get("name") == virtual.split("Virtual: ")[1]
+        )
+        # logging.warning("CHECK THIS: %s", test)
 
         testcolor = color_hs_to_RGB(state.get("hs_color")[0], state.get("hs_color")[1])
-        b = self.virtuals.get("virtuals").get("list")[0].get("items")
+        b = test.get("items")
         c = sorted(b, key=lambda x: x.get("order_number"))
         # logging.warning("B: %s \n C: %s \n\n", b, c)
         for key in c:

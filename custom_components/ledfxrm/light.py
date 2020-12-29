@@ -407,7 +407,7 @@ class LedfxrmVirtualsLight(LedfxrmLight):
         #     kwargs,
         # )
         if "hs_color" in kwargs:
-            await self.coordinator.api.async_virtual_on(kwargs)
+            await self.coordinator.api.async_virtual_on(kwargs, self.name)
             self._hs = kwargs["hs_color"]
         if "effect" in kwargs:
             # logging.warning(
@@ -443,12 +443,7 @@ class LedfxrmVirtualsLight(LedfxrmLight):
     @property
     def unique_id(self):
         """Return a unique ID to use for this entity."""
-        return self.config_entry.entry_id + "." + self.virtual.get("name")
-
-    @property
-    def name(self):
-        """Return the name of the light."""
-        return "⮑ " + self.virtual.get("name")
+        return self.config_entry.entry_id + ".virtual-" + self.virtual.get("name")
 
     @property
     def supported_features(self) -> int:
@@ -470,11 +465,6 @@ class LedfxrmVirtualsLight(LedfxrmLight):
     def assumed_state(self):
         """Return the name of the switch."""
         return True
-
-    @property
-    def unique_id(self):
-        """Return a unique ID to use for this entity."""
-        return self.config_entry.entry_id + ".virtual-light"
 
     @property
     def name(self):
