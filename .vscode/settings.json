@@ -8,5 +8,6 @@
   },
   "python.linting.pylintEnabled": true,
   "python.linting.enabled": true,
+  "python.linting.pylamaEnabled": true,
   "python.pythonPath": "/usr/local/bin/python3"
 }

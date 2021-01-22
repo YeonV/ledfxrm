@@ -1,0 +1,151 @@
+type: vertical-stack
+cards:
+  - type: picture
+    image: >-
+      https://user-images.githubusercontent.com/28861537/99007089-cac6e100-2543-11eb-99d3-01bf0b487d29.png
+    tap_action:
+      action: none
+    theme: Caule Black Aqua
+  - type: glance
+    entities:
+      - entity: sensor.ledfxrm
+      - entity: sensor.ledfxrm_2
+      - entity: sensor.ledfxrm_3
+    state_color: false
+    show_name: false
+    title: LedFX ReMote
+    theme: Caule Black Aqua Glass
+  - type: horizontal-stack
+    cards:
+      - shorten_cards: false
+        consolidate_entities: false
+        color_wheel: false
+        persist_features: true
+        brightness: false
+        color_temp: false
+        white_value: false
+        color_picker: false
+        smooth_color_wheel: false
+        hide_header: true
+        child_card: false
+        show_slider_percent: false
+        full_width_sliders: false
+        brightness_icon: weather-sunny
+        white_icon: file-word-box
+        temperature_icon: thermometer
+        type: 'custom:light-entity-card'
+        header: Ledfxrm_8
+        entity: light.ledfxrm_8
+      - type: button
+        tap_action:
+          action: more-info
+        entity: binary_sensor.ledfxrm
+        show_icon: true
+        show_state: true
+        show_name: false
+        icon_height: 50px
+  - entities:
+      - attribute: Mode
+        entity: light.ledfxrm_2
+        name: Effect
+      - attribute: Pixels
+        entity: light.ledfxrm_2
+        name: Pixel
+    entity: light.ledfxrm_2
+    icon: 'mdi:sofa'
+    name: Couch
+    secondary_info:
+      attribute: IP
+      name: null
+    toggle: true
+    type: 'custom:multiple-entity-row'
+  - entities:
+      - attribute: Mode
+        entity: light.ledfxrm
+        name: Effect
+      - attribute: Pixels
+        entity: light.ledfxrm
+        name: Pixel
+    entity: light.ledfxrm
+    icon: 'mdi:desk'
+    name: Desk II
+    secondary_info:
+      attribute: IP
+      name: null
+    toggle: true
+    type: 'custom:multiple-entity-row'
+  - entities:
+      - attribute: Mode
+        entity: light.ledfxrm_3
+        name: Effect
+      - attribute: Pixels
+        entity: light.ledfxrm_3
+        name: Pixel
+    entity: light.ledfxrm_3
+    icon: 'mdi:water'
+    name: Kitchen
+    secondary_info:
+      attribute: IP
+      name: null
+    toggle: true
+    type: 'custom:multiple-entity-row'
+  - entities:
+      - attribute: Mode
+        entity: light.ledfxrm_4
+        name: Effect
+      - attribute: Pixels
+        entity: light.ledfxrm_4
+        name: Pixel
+    entity: light.ledfxrm_4
+    icon: 'mdi:television'
+    name: TV
+    secondary_info:
+      attribute: IP
+      name: null
+    toggle: true
+    type: 'custom:multiple-entity-row'
+  - entities:
+      - attribute: Mode
+        entity: light.ledfxrm_5
+        name: Effect
+      - attribute: Pixels
+        entity: light.ledfxrm_5
+        name: Pixel
+    entity: light.ledfxrm_5
+    icon: 'mdi:lava-lamp'
+    name: Mobile I
+    secondary_info:
+      attribute: IP
+      name: null
+    toggle: true
+    type: 'custom:multiple-entity-row'
+  - entities:
+      - attribute: Mode
+        entity: light.ledfxrm_6
+        name: Effect
+      - attribute: Pixels
+        entity: light.ledfxrm_6
+        name: Pixel
+    entity: light.ledfxrm_6
+    icon: 'mdi:radiator'
+    name: Heizung
+    secondary_info:
+      attribute: IP
+      name: null
+    toggle: true
+    type: 'custom:multiple-entity-row'
+  - entities:
+      - attribute: Mode
+        entity: light.ledfxrm_7
+        name: Effect
+      - attribute: Pixels
+        entity: light.ledfxrm_7
+        name: Pixel
+    entity: light.ledfxrm_7
+    icon: 'mdi:desk'
+    name: Desk II
+    secondary_info:
+      attribute: IP
+      name: null
+    toggle: true
+    type: 'custom:multiple-entity-row'

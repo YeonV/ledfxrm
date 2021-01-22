@@ -15,13 +15,16 @@
 
 ### LedFx Remote
 
-- Start and stop the LedFx server from inside Home Assistant!
-- Select your LedFx scene
-- Display the number of devices connected to LedFx
+- Select your LedFx scene from inside Home Assistant!
+- Display the number of scenes/devices/pixels connected to LedFx
+- Start and stop the LedFx server (custom Endpoint required!)
 
 ### LedFx Device Remote
 
 - Toggle the power for devices configured in LedFx
+- Display number of pixels per device
+- Display IP per device
+- Display current running effect-name
 
 | Default | With Devices |
 |:-------:|:------------:|
@@ -29,7 +32,8 @@
 
 ## Requirements:
 
-- [LedFx](https://github.com/ahodges9/LedFx) > v0.7
+- [LedFx](https://github.com/ahodges9/LedFx/tree/dev)
+  - minimum version: v0.84 (so atm you need the dev-branch or ledfx-dev)
   - with at least one scene setup
   - the ledfx config.yaml file defines your host as 127.0.0.1 by default. The host needs to be changed to  0.0.0.0 in order for this integration to function properly.
   - [LedFx Docs](https://ledfx.readthedocs.io/en/docs/)
@@ -86,10 +90,15 @@
   - ON / OFF Button
     - OFF Button saves the current effect running on the current device
     - ON Button will use that state if available otherwise sends "Gradient"
+- Start/Stop Server:
+  - Set custom Endpoints for Start and Stop
+  - Configurable methods: `GET`, `DELETE`, `PUT`, `POST`
+  - Configurable body: json (untested)
+- NEW: Add Blade-Light: 1 effect throught multiple devices
 
 ## Upcoming Features
 
-- More settings in Server Start/Stop Commands
+
 - Make also use of the after setup config flow (options)
   - Allow editing of setup-settings
   - Allow disable poll (If you have everything setup in ledfx, there is no need to poll for new infos all the time)
@@ -101,6 +110,8 @@
 <summary>show</summary>
 <p>
 Default:
+
+![ledfx-remote](https://user-images.githubusercontent.com/28861537/100016798-46dde600-2dda-11eb-90c5-8229024a2e39.png)
 
 ![setup](https://github.com/YeonV/ledfxrm/raw/main/docs/setup.png)
 
