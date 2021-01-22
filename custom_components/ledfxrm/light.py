@@ -159,7 +159,6 @@ class LedfxrmChildLight(LedfxrmLight):
     # def supported_features(self) -> int:
     #    """Flag supported features."""
     #    return SUPPORT_EFFECT
-
     @property
     def assumed_state(self):
         """Return the name of the switch."""
@@ -183,7 +182,10 @@ class LedfxrmChildLight(LedfxrmLight):
     @property
     def icon(self):
         """Return the icon of this light."""
-        return ICON_STRIP_DEVICE
+        if self.deviceconfig["icon_name"].startswith("mdi:"):
+            return self.deviceconfig["icon_name"]
+        else:
+            return ICON_STRIP_DEVICE
 
     @property
     def effect(self):

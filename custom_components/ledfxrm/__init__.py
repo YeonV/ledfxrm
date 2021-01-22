@@ -572,7 +572,7 @@ class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
                 scenes = data.get("scenes").get("scenes")
                 devices = data.get("devices").get("devices")
                 if scenes != {}:
-                    logging.warning("UPDATING WTF %s", data)
+                    # logging.warning("UPDATING WTF %s", data)
                     self.scenes = scenes
                     self.devices = devices
                     self.number_scenes = len(scenes)
