@@ -1,6 +1,6 @@
 """Constants for ledfxrm."""
 # Base component constants
-NAME = "LedFX ReMote"
+NAME = "LedFx ReMote"
 DOMAIN = "ledfxrm"
 DOMAIN_DATA = f"{DOMAIN}_data"
 VERSION = "0.2.4"

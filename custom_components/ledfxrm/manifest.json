@@ -1,6 +1,6 @@
 {
   "domain": "ledfxrm",
-  "name": "LedFX Remote",
+  "name": "LedFx Remote",
   "documentation": "https://github.com/YeonV/ledfxrm",
   "issue_tracker": "https://github.com/YeonV/ledfxrm/issues",
   "dependencies": ["http"],

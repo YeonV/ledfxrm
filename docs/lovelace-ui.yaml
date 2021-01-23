@@ -13,7 +13,7 @@ cards:
       - entity: sensor.ledfxrm_3
     state_color: false
     show_name: false
-    title: LedFX ReMote
+    title: LedFx ReMote
     theme: Caule Black Aqua Glass
   - type: horizontal-stack
     cards:

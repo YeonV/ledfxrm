@@ -85,7 +85,7 @@ class LedfxrmLight(LedfxrmEntity, LightEntity):
     @property
     def name(self):
         """Return the name of the light."""
-        return "LedFX Scene-Selector"
+        return "LedFx Scene-Selector"
 
     @property
     def icon(self):
