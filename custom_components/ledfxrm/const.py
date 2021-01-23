@@ -3,7 +3,7 @@
 NAME = "LedFX ReMote"
 DOMAIN = "ledfxrm"
 DOMAIN_DATA = f"{DOMAIN}_data"
-VERSION = "0.2.5"
+VERSION = "0.2.6"
 MANUFACTURER = "YeonV"
 
 ISSUE_URL = "https://github.com/YeonV/ledfxrm/issues"
