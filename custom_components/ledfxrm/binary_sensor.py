@@ -1,5 +1,5 @@
 """Binary sensor platform for ledfxrm."""
-from homeassistant.components.binary_sensor import BinarySensorEntity 
+from homeassistant.components.binary_sensor import BinarySensorEntity
 
 from custom_components.ledfxrm.const import (
     BINARY_SENSOR,
@@ -22,10 +22,11 @@ class LedfxrmBinarySensor(LedfxrmEntity, BinarySensorEntity ):
     def unique_id(self):
         """Return a unique ID to use for this entity."""
         return self.config_entry.entry_id + '_status'
+
     @property
     def name(self):
         """Return the name of the binary_sensor."""
-        return f"LedFX Server-Status"
+        return f"LedFx Server-Status"
 
     @property
     def device_class(self):

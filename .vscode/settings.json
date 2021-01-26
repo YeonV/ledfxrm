@@ -1,5 +1,13 @@
 {
-    "python.linting.pylintEnabled": false,
-    "python.linting.enabled": true,
-    "python.linting.pylamaEnabled": true
+  "markdownlint.config": {
+    "default": true,
+    "MD001": false,
+    "MD003": false,
+    "MD026": false,
+    "MD033": false,
+  },
+  "python.linting.pylintEnabled": true,
+  "python.linting.enabled": true,
+  "python.linting.pylamaEnabled": true,
+  "python.pythonPath": "/usr/local/bin/python3"
 }

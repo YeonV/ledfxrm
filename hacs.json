@@ -1,5 +1,5 @@
 {
-    "name": "LedFX Remote",
+    "name": "LedFx Remote",
     "render_readme": true,
     "domains": [
       "binary_sensor",
