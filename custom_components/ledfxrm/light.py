@@ -182,7 +182,7 @@ class LedfxrmChildLight(LedfxrmLight):
     @property
     def icon(self):
         """Return the icon of this light."""
-        if self.deviceconfig.has_key("icon_name")
+        if self.deviceconfig.has_key("icon_name"):
             if self.deviceconfig["icon_name"].startswith("mdi:"):
                 return self.deviceconfig["icon_name"]
             else:
