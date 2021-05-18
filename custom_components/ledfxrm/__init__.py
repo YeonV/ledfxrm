@@ -176,12 +176,12 @@ class myClient:
                         yz["rest_devices"] = rest_devices
                         self.devices = yz["rest_devices"]
                         if len(self.devicestates) == 0:
-                            for k in rest_devices["devices"]:
+                            for k in rest_devices["displays"]:
                                 if (
-                                    len(rest_devices["devices"][k].get("effect", {}))
+                                    len(rest_devices["displays"][k].get("effect", {}))
                                     > 0
                                 ):
-                                    effect = rest_devices["devices"][k].get("effect")
+                                    effect = rest_devices["displays"][k].get("effect")
                                     power = True
                                 else:
 
