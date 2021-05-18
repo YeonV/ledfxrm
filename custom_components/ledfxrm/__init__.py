@@ -139,7 +139,7 @@ class myClient:
 
     async def update(self):
         url = "http://" + self.thehost + ":" + str(self.theport) + "/api/info"
-        url2 = "http://" + self.thehost + ":" + str(self.theport) + "/api/devices"
+        url2 = "http://" + self.thehost + ":" + str(self.theport) + "/api/displays"
         url3 = "http://" + self.thehost + ":" + str(self.theport) + "/api/scenes"
         url4 = "http://" + self.thehost + ":" + str(self.theport) + "/api/virtuals"
         yz = {}
