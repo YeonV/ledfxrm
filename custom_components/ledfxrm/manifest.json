@@ -7,5 +7,5 @@
   "codeowners": ["@YeonV"],
   "requirements": [],
   "config_flow": true,
-  "version": "0.2.8"
+  "version": "0.2.9"
 }

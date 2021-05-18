@@ -10,10 +10,10 @@ from custom_components.ledfxrm.const import (
 from custom_components.ledfxrm.entity import LedfxrmEntity
 
 
-async def async_setup_entry(hass, entry, async_add_devices):
+async def async_setup_entry(hass, entry, async_add_displays):
     """Setup binary_sensor platform."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
-    async_add_devices([LedfxrmBinarySensor(coordinator, entry)])
+    async_add_displays([LedfxrmBinarySensor(coordinator, entry)])
 
 
 class LedfxrmBinarySensor(LedfxrmEntity, BinarySensorEntity ):

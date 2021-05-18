@@ -64,7 +64,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     thestart = entry.data.get(CONF_START)
     thestop = entry.data.get(CONF_STOP)
     thescan = entry.data.get(CONF_SCAN_INTERVAL)
-    thesubdevices = entry.data.get(CONF_SHOW_SUBDEVICES)
+    thesubdisplays = entry.data.get(CONF_SHOW_SUBDEVICES)
     theblade_light = entry.data.get(CONF_SHOW_BLADELIGHT)
     thestart_method = entry.data.get(CONF_START_METHOD)
     thestart_body = entry.data.get(CONF_START_BODY)
@@ -78,7 +78,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         thestart,
         thestop,
         thescan,
-        thesubdevices,
+        thesubdisplays,
         theblade_light,
         thestart_method,
         thestart_body,
@@ -113,7 +113,7 @@ class myClient:
         theport,
         thestart,
         thestop,
-        thesubdevices,
+        thesubdisplays,
         theblade_light,
         thestart_method,
         thestart_body,
@@ -126,10 +126,10 @@ class myClient:
         self.thestop = thestop
         self.connected = False
         self.effect = "off"
-        self.thesubdevices = thesubdevices
+        self.thesubdisplays = thesubdisplays
         self.theblade_light = theblade_light
-        self.devicestates = {}
-        self.devices = {}
+        self.displaystates = {}
+        self.displays = {}
         self.virtuals = {}
         self.thestart_method = thestart_method
         self.thestart_body = thestart_body
@@ -144,11 +144,11 @@ class myClient:
         url4 = "http://" + self.thehost + ":" + str(self.theport) + "/api/virtuals"
         yz = {}
         rest_info = {}
-        rest_devices = {}
+        rest_displays = {}
         rest_scenes = {}
         rest_virtuals = {}
         yz["rest_info"] = {}
-        yz["rest_devices"] = {}
+        yz["rest_displays"] = {}
         yz["rest_scenes"] = {}
         yz["rest_virtuals"] = {}
 
@@ -170,30 +170,30 @@ class myClient:
                 return {}
 
             try:
-                async with session.get(url2, ssl=False) as resp_devices:
-                    if resp_devices.status == 200:
-                        rest_devices = await resp_devices.json()
-                        yz["rest_devices"] = rest_devices
-                        self.devices = yz["rest_devices"]
-                        if len(self.devicestates) == 0:
-                            for k in rest_devices["displays"]:
+                async with session.get(url2, ssl=False) as resp_displays:
+                    if resp_displays.status == 200:
+                        rest_displays = await resp_displays.json()
+                        yz["rest_displays"] = rest_displays
+                        self.displays = yz["rest_displays"]
+                        if len(self.displaystates) == 0:
+                            for k in rest_displays["displays"]:
                                 if (
-                                    len(rest_devices["displays"][k].get("effect", {}))
+                                    len(rest_displays["displays"][k].get("effect", {}))
                                     > 0
                                 ):
-                                    effect = rest_devices["displays"][k].get("effect")
+                                    effect = rest_displays["displays"][k].get("effect")
                                     power = True
                                 else:
 
                                     effect = {}
                                     power = False
-                                self.devicestates[k] = {
+                                self.displaystates[k] = {
                                     "power": power,
                                     "effect": effect,
                                 }
                     else:
                         logging.warning(
-                            "CANT CONNECT TO LEDFX - DEVICES: %s", resp_devices.status
+                            "CANT CONNECT TO LEDFX - DEVICES: %s", resp_displays.status
                         )
 
             except aiohttp.ClientConnectorError as e:
@@ -230,28 +230,28 @@ class myClient:
             #     rest_info = await resp.json()
             #     yz["rest_info"] = rest_info
 
-            # async with session.get(url2, ssl=False) as resp_devices:
-            #     rest_devices = await resp_devices.json()
-            #     yz["rest_devices"] = rest_devices
-            #     self.devices = yz["rest_devices"]
-            #     # logging.warning("INTERNAL STATES b4: %s", self.devicestates)
-            #     if len(self.devicestates) == 0:
-            #         for k in rest_devices["devices"]:
+            # async with session.get(url2, ssl=False) as resp_displays:
+            #     rest_displays = await resp_displays.json()
+            #     yz["rest_displays"] = rest_displays
+            #     self.displays = yz["rest_displays"]
+            #     # logging.warning("INTERNAL STATES b4: %s", self.displaystates)
+            #     if len(self.displaystates) == 0:
+            #         for k in rest_displays["displays"]:
             #             # logging.warning("NOWWW: %s", k)
-            #             # logging.warning("THENN: %s", rest_devices['devices'][k])
-            #             if len(rest_devices["devices"][k].get("effect", {})) > 0:
-            #                 # logging.warning("GOT EFFECT FROM LEDFX: %s", rest_devices['devices'][k].get('effect'))
-            #                 effect = rest_devices["devices"][k].get("effect")
+            #             # logging.warning("THENN: %s", rest_displays['displays'][k])
+            #             if len(rest_displays["displays"][k].get("effect", {})) > 0:
+            #                 # logging.warning("GOT EFFECT FROM LEDFX: %s", rest_displays['displays'][k].get('effect'))
+            #                 effect = rest_displays["displays"][k].get("effect")
             #                 power = True
             #             else:
 
             #                 effect = {}
             #                 power = False
-            #             self.devicestates[k] = {
+            #             self.displaystates[k] = {
             #                 "power": power,
-            #                 "effect": effect,  # self.devicestates[k].get('effect', {})
+            #                 "effect": effect,  # self.displaystates[k].get('effect', {})
             #             }
-            #     # logging.warning("INTERNAL STATES after: %s", self.devicestates)
+            #     # logging.warning("INTERNAL STATES after: %s", self.displaystates)
 
             # async with session.get(url3, ssl=False) as resp_scenes:
             #     rest_scenes = await resp_scenes.json()
@@ -262,10 +262,10 @@ class myClient:
 
         return {
             "info": rest_info,
-            "devices": rest_devices,
+            "displays": rest_displays,
             "virtuals": rest_virtuals,
             "scenes": rest_scenes,
-            "show_subdevices": self.thesubdevices,
+            "show_subdisplays": self.thesubdisplays,
         }
 
     async def async_set_transition_time(self, time):
@@ -345,13 +345,13 @@ class myClient:
         return None
 
     async def async_device_off(self, state):
-        # logging.warning('DEVICE OFF internal --- %s --- %s', state, self.devicestates[state].get('effect'))
+        # logging.warning('DEVICE OFF internal --- %s --- %s', state, self.displaystates[state].get('effect'))
         url4 = (
             "http://"
             + self.thehost
             + ":"
             + str(self.theport)
-            + "/api/devices/"
+            + "/api/displays/"
             + state
             + "/effects"
         )
@@ -361,24 +361,24 @@ class myClient:
             async with session.get(url4, ssl=False) as get_effect:
                 testing = await get_effect.json()
                 if testing["effect"] != {}:
-                    self.devicestates[state]["effect"] = testing["effect"]
-                    # logging.warning("Turning Off, found effect: %s", self.devicestates[state].get('effect'))
+                    self.displaystates[state]["effect"] = testing["effect"]
+                    # logging.warning("Turning Off, found effect: %s", self.displaystates[state].get('effect'))
                     async with session.delete(url4, ssl=False) as del_effect:
                         await del_effect.json()
                 # else:
                 # logging.warning("Turning Off, No effect:")
 
-        self.devicestates[state]["power"] = False
+        self.displaystates[state]["power"] = False
         return None
 
     async def async_device_on(self, state):
-        # logging.warning('DEVICE ON internal --- %s --- %s', state, self.devicestates[state].get('effect'))
+        # logging.warning('DEVICE ON internal --- %s --- %s', state, self.displaystates[state].get('effect'))
         url4 = (
             "http://"
             + self.thehost
             + ":"
             + str(self.theport)
-            + "/api/devices/"
+            + "/api/displays/"
             + state
             + "/effects"
         )
@@ -389,10 +389,10 @@ class myClient:
                 testing = await get_effect.json()
                 if testing["effect"] != {}:
                     # logging.warning("Turning on, found effect: %s", testing['effect'])
-                    self.devicestates[state]["effect"] = testing["effect"]
+                    self.displaystates[state]["effect"] = testing["effect"]
 
-                # payload = {'config': self.devicestates[state].get('effect').get('config')}
-                payload = self.devicestates[state].get("effect")
+                # payload = {'config': self.displaystates[state].get('effect').get('config')}
+                payload = self.displaystates[state].get("effect")
 
                 if payload is None or payload == {}:
                     payload = {
@@ -416,7 +416,7 @@ class myClient:
                 # logging.warning("Setting Effect, %s", payload)
                 async with session.post(url4, json=payload, ssl=False) as set_effect:
                     await set_effect.json()
-        self.devicestates[state]["power"] = True
+        self.displaystates[state]["power"] = True
         return None
 
     async def async_virtual_off(self, virtual):
@@ -430,9 +430,9 @@ class myClient:
         for key in c:
             # logging.warning(
             #     "BLADE OFF internal --- %s --- %s --- %s",
-            #     self.devices.get("devices").get(key).get("config").get("name"),
-            #     self.devices.get("devices").get(key).get("config").get("ip_address"),
-            #     self.devices.get("devices").get(key).get("config").get("pixel_count"),
+            #     self.displays.get("displays").get(key).get("config").get("name"),
+            #     self.displays.get("displays").get(key).get("config").get("ip_address"),
+            #     self.displays.get("displays").get(key).get("config").get("pixel_count"),
             # )
             for i in range(key.get("used_pixel")):
 
@@ -521,7 +521,7 @@ class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
         theblade_light,
         thestop,
         thescan,
-        thesubdevices,
+        thesubdisplays,
         thestart_method,
         thestart_body,
         thestop_method,
@@ -535,7 +535,7 @@ class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
         self.thestop = thestop
         self.thestart = thestart
         self.thescan = thescan
-        self.thesubdevices = thesubdevices
+        self.thesubdisplays = thesubdisplays
         self.theblade_light = theblade_light
         self.thestart_method = thestart_method
         self.thestart_body = thestart_body
@@ -547,7 +547,7 @@ class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
             theport,
             thestart,
             thestop,
-            thesubdevices,
+            thesubdisplays,
             theblade_light,
             thestart_method,
             thestart_body,
@@ -564,17 +564,17 @@ class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
             # logging.warning('SCAN_INTERVAL_CHECK %s', self.thescan)
             data = await self.api.update()
             scenes = {}
-            devices = {}
+            displays = {}
             virtuals = {}
             # logging.warning("UPDATING %s", data)
             if data != {}:
 
                 scenes = data.get("scenes").get("scenes")
-                devices = data.get("devices").get("devices")
+                displays = data.get("displays").get("displays")
                 if scenes != {}:
                     # logging.warning("UPDATING WTF %s", data)
                     self.scenes = scenes
-                    self.devices = devices
+                    self.displays = displays
                     self.number_scenes = len(scenes)
                     self.lost = False
                     self.connected = True
@@ -605,7 +605,7 @@ class LedfxrmDataUpdateCoordinator(DataUpdateCoordinator):
             return {
                 "info": {"name": "Not Ready", "version": "1.0"},
                 "scenes": {"scenes": {}},
-                "devices": {"devices": {}},
+                "displays": {"displays": {}},
                 "virtuals": {"virtuals": {}},
             }
 

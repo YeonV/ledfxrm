@@ -4,10 +4,10 @@ from custom_components.ledfxrm.entity import LedfxrmEntity
 from typing import Any, Callable, Dict, List, Optional
 import logging
 
-async def async_setup_entry( hass, entry, async_add_devices):
+async def async_setup_entry( hass, entry, async_add_displays):
     """Setup sensor platform."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
-    async_add_devices([
+    async_add_displays([
         LedfxrmSensor(coordinator, entry),
         LedfxrmDeviceSensor(coordinator, entry),
         LedfxrmPixelSensor(coordinator, entry),
@@ -28,7 +28,7 @@ class LedfxrmPixelSensor(LedfxrmEntity):
     @property
     def state(self):
         """Return the state of the sensor."""
-        devicenames = self.coordinator.data.get('devices').get('devices')
+        devicenames = self.coordinator.data.get('displays').get('displays')
         pixels = 0
         for k in devicenames:
             pixels = pixels + devicenames[k]['config'].get('pixel_count')
@@ -44,7 +44,7 @@ class LedfxrmDeviceSensor(LedfxrmEntity):
     @property
     def unique_id(self):
         """Return a unique ID to use for this entity."""
-        return self.config_entry.entry_id + '_devices'
+        return self.config_entry.entry_id + '_displays'
         
     @property
     def name(self):
@@ -54,7 +54,7 @@ class LedfxrmDeviceSensor(LedfxrmEntity):
     @property
     def state(self):
         """Return the state of the sensor."""
-        devicenames = self.coordinator.data.get('devices').get('devices')
+        devicenames = self.coordinator.data.get('displays').get('displays')
         return len(devicenames)
 
     @property

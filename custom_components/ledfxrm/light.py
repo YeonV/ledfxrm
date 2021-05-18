@@ -32,26 +32,26 @@ import logging
 from typing import Any, Dict, Optional
 
 
-async def async_setup_entry(hass, entry, async_add_devices):
+async def async_setup_entry(hass, entry, async_add_displays):
     """Setup sensor platform."""
     coordinator = hass.data[DOMAIN][entry.entry_id]
-    devicenames = coordinator.data.get("devices").get("devices")
+    devicenames = coordinator.data.get("displays").get("displays")
     virtuals = coordinator.data.get("virtuals").get("virtuals").get("list")
     # logging.warning("YEEES2: %s", virtuals)
     test = entry.data.get(CONF_SHOW_SUBDEVICES)
     test2 = entry.data.get(CONF_SHOW_BLADELIGHT)
     if test is True:
         for k in devicenames:
-            async_add_devices(
+            async_add_displays(
                 [LedfxrmChildLight(coordinator, entry, k, devicenames[k]["config"])]
             )
 
     if test2 is True:
-        async_add_devices([LedfxrmLight(coordinator, entry)])
+        async_add_displays([LedfxrmLight(coordinator, entry)])
         for k in virtuals:
-            async_add_devices([LedfxrmVirtualsLight(coordinator, entry, k)])
+            async_add_displays([LedfxrmVirtualsLight(coordinator, entry, k)])
     else:
-        async_add_devices([LedfxrmLight(coordinator, entry)])
+        async_add_displays([LedfxrmLight(coordinator, entry)])
 
 
 class LedfxrmLight(LedfxrmEntity, LightEntity):
@@ -112,7 +112,7 @@ class LedfxrmLight(LedfxrmEntity, LightEntity):
     def device_state_attributes(self) -> Optional[Dict[str, Any]]:
         """Return the state attributes of the entity."""
         scenenames = self.coordinator.data.get("scenes").get("scenes")
-        devicenames = self.coordinator.data.get("devices").get("devices")
+        devicenames = self.coordinator.data.get("displays").get("displays")
         pixels = 0
         for k in devicenames:
             pixels = pixels + devicenames[k]["config"].get("pixel_count")
@@ -203,14 +203,14 @@ class LedfxrmChildLight(LedfxrmLight):
     @property
     def device_state_attributes(self) -> Optional[Dict[str, Any]]:
         """Return the state attributes of the entity."""
-        # logging.warning("OMMMMG: %s ", self.coordinator.api.devicestates)
+        # logging.warning("OMMMMG: %s ", self.coordinator.api.displaystates)
         if self.deviceconfig == {}:
             return {"status": "error"}
         return {
             "IP": self.deviceconfig["ip_address"],
             "Pixels": self.deviceconfig["pixel_count"],
             "Refresh Rate": self.deviceconfig["refresh_rate"],
-            "Mode": self.coordinator.api.devicestates[self.devicename]["effect"].get(
+            "Mode": self.coordinator.api.displaystates[self.devicename]["effect"].get(
                 "name", "OFF"
             ),
         }
@@ -218,7 +218,7 @@ class LedfxrmChildLight(LedfxrmLight):
     @property
     def is_on(self):
         """Return true if the light is on."""
-        return self.coordinator.api.devicestates[self.devicename]["power"]
+        return self.coordinator.api.displaystates[self.devicename]["power"]
 
 
 class LedfxrmVirtualsLight(LedfxrmLight):
@@ -318,5 +318,5 @@ class LedfxrmVirtualsLight(LedfxrmLight):
     @property
     def is_on(self):
         """Return true if the light is on."""
-        # return self.coordinator.api.devicestates[self.devicename]["power"]
+        # return self.coordinator.api.displaystates[self.devicename]["power"]
         return True

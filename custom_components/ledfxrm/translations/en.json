@@ -1,63 +1,63 @@
 {
-    "config": {
-        "step": {
-            "user": {
-                "title": "LedFx Remote - Setup",
-                "description": "Welcome\nPlease make sure you meet the requirements:\n- LedFx Server >0.7 up and running\n- At lease one scene defined in LedFx\n- Change host in ledfx-confi-yaml from 127.0.0.1 to your IP\n (maybe 0.0.0.0 also work)\n alternativly you can start it with `ledfx --host 0.0.0.0`\n\nIf you need help with the configuration have a look here: https://github.com/YeonV/ledfxrm",
-                "data": {
-                    "thehost": "192.168.1.56",
-                    "theport": "8888",
-                    "host": "Host",
-                    "port": "Port",
-                    "start": "Start-Endpoint",
-                    "start_method": "Method for Start-Endpoint",
-                    "start_body": "JSON-Body for Start-Endpoint",
-                    "stop": "Stop-Endpoint",
-                    "stop_method": "Method for Stop-Endpoint",
-                    "stop_body": "JSON-Body for End-Endpoint",
-                    "scan_interval": "Scan interval in seconds",
-                    "advanced": "Add Start/Stop-Server custom-endpoint",
-                    "show_subdevices": "Create Entities for SubDevices",
-                    "show_blade_light": "Add Virtual-Lights (requires LedFx >0.9.2)"
-                }
-            },
-            "user_2": {
-                "title": "LedFx Remote - Advanced Setup",
-                "description": "https://github.com/YeonV/ledfxrm",
-                "data": {
-                    "thehost": "192.168.1.56",
-                    "theport": "8888",
-                    "host": "Host",
-                    "port": "Port",
-                    "start": "Start-Endpoint",
-                    "start_method": "Method for Start-Endpoint",
-                    "start_body": "JSON-Body for Start-Endpoint",
-                    "stop": "Stop-Endpoint",
-                    "stop_method": "Method for Stop-Endpoint",
-                    "stop_body": "JSON-Body for End-Endpoint",
-                    "scan_interval": "Scan interval in seconds",
-                    "advanced": "Advanced Settings",
-                    "show_subdevices": "Create Entities for SubDevices?"
-                }
-            }
-        },
-        "error": {
-            "auth": "Cannot connect to LedFx."
-        },
-        "abort": {
-            "single_instance_allowed": "Only a single configuration of Ledfxrm is allowed."
+  "config": {
+    "step": {
+      "user": {
+        "title": "LedFx Remote - Setup",
+        "description": "Welcome\nPlease make sure you meet the requirements:\n- LedFx Server >0.7 up and running\n- At lease one scene defined in LedFx\n- Change host in ledfx-confi-yaml from 127.0.0.1 to your IP\n (maybe 0.0.0.0 also work)\n alternativly you can start it with `ledfx --host 0.0.0.0`\n\nIf you need help with the configuration have a look here: https://github.com/YeonV/ledfxrm",
+        "data": {
+          "thehost": "192.168.1.56",
+          "theport": "8888",
+          "host": "Host",
+          "port": "Port",
+          "start": "Start-Endpoint",
+          "start_method": "Method for Start-Endpoint",
+          "start_body": "JSON-Body for Start-Endpoint",
+          "stop": "Stop-Endpoint",
+          "stop_method": "Method for Stop-Endpoint",
+          "stop_body": "JSON-Body for End-Endpoint",
+          "scan_interval": "Scan interval in seconds",
+          "advanced": "Add Start/Stop-Server custom-endpoint",
+          "show_subdisplays": "Create Entities for SubDevices",
+          "show_blade_light": "Add Virtual-Lights (requires LedFx >0.9.2)"
         }
+      },
+      "user_2": {
+        "title": "LedFx Remote - Advanced Setup",
+        "description": "https://github.com/YeonV/ledfxrm",
+        "data": {
+          "thehost": "192.168.1.56",
+          "theport": "8888",
+          "host": "Host",
+          "port": "Port",
+          "start": "Start-Endpoint",
+          "start_method": "Method for Start-Endpoint",
+          "start_body": "JSON-Body for Start-Endpoint",
+          "stop": "Stop-Endpoint",
+          "stop_method": "Method for Stop-Endpoint",
+          "stop_body": "JSON-Body for End-Endpoint",
+          "scan_interval": "Scan interval in seconds",
+          "advanced": "Advanced Settings",
+          "show_subdisplays": "Create Entities for SubDevices?"
+        }
+      }
     },
-    "options": {
-        "step": {
-            "user": {
-                "data": {
-                    "binary_sensor": "Binary sensor enabled",
-                    "light": "Light enabled",
-                    "sensor": "Sensor enabled",
-                    "switch": "Switch enabled"
-                }
-            }
-        }
+    "error": {
+      "auth": "Cannot connect to LedFx."
+    },
+    "abort": {
+      "single_instance_allowed": "Only a single configuration of Ledfxrm is allowed."
     }
+  },
+  "options": {
+    "step": {
+      "user": {
+        "data": {
+          "binary_sensor": "Binary sensor enabled",
+          "light": "Light enabled",
+          "sensor": "Sensor enabled",
+          "switch": "Switch enabled"
+        }
+      }
+    }
+  }
 }
