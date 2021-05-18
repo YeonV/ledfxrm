@@ -6,5 +6,6 @@
   "dependencies": ["http"],
   "codeowners": ["@YeonV"],
   "requirements": [],
-  "config_flow": true
+  "config_flow": true,
+  "version": "0.2.8"
 }
